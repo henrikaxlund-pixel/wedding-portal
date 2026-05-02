@@ -1,7 +1,7 @@
-'use client';
+﻿'use client';
 
 import { useState, useRef } from 'react';
-import { Task, User, Status, Attachment } from './KanbanBoard';
+import { Task, User, Status, Attachment, Assignee } from './KanbanBoard';
 
 const STATUSES: { value: Status; label: string; color: string }[] = [
   { value: 'not_started', label: 'Not started', color: 'bg-stone-100 text-stone-600' },
@@ -21,7 +21,7 @@ export default function TaskModal({ task, users, onClose, onUpdate, onDelete }: 
   const [title, setTitle] = useState(task.title);
   const [description, setDescription] = useState(task.description ?? '');
   const [status, setStatus] = useState<Status>(task.status);
-  const [assigneeId, setAssigneeId] = useState<string>(task.assignee_id ?? '');
+  const [assigneeIds, setAssigneeIds] = useState<string[]>(task.assignees.map(a => a.id));
   const [attachments, setAttachments] = useState<Attachment[]>(task.attachments);
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -29,20 +29,32 @@ export default function TaskModal({ task, users, onClose, onUpdate, onDelete }: 
 
   async function save() {
     setSaving(true);
-    const res = await fetch(`/api/tasks/${task.id}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        title,
-        description,
-        status,
-        assignee_id: assigneeId || null,
-      }),
-    });
-    const updated = await res.json();
-    onUpdate({ ...updated, attachments });
-    setSaving(false);
-    onClose();
+    try {
+      const res = await fetch(`/api/tasks/${task.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title,
+          description,
+          status,
+          assignee_ids: assigneeIds,
+        }),
+      });
+      if (!res.ok) {
+        const err = await res.text();
+        console.error('Save error:', res.status, err);
+        alert(`Save failed (${res.status}): ${err}`);
+        return;
+      }
+      const updated = await res.json();
+      onUpdate({ ...updated, attachments });
+      onClose();
+    } catch (e) {
+      console.error('Save failed:', e);
+      alert(`Save failed: ${e}`);
+    } finally {
+      setSaving(false);
+    }
   }
 
   async function uploadFile(e: React.ChangeEvent<HTMLInputElement>) {
@@ -96,7 +108,7 @@ export default function TaskModal({ task, users, onClose, onUpdate, onDelete }: 
             <input
               value={title}
               onChange={e => setTitle(e.target.value)}
-              className="w-full text-lg font-semibold text-stone-800 border-b border-stone-200 pb-1 focus:outline-none focus:border-rose-400"
+              className="w-full text-lg font-semibold text-stone-900 bg-white border-b border-stone-200 pb-1 focus:outline-none focus:border-emerald-500 placeholder:text-stone-400"
               placeholder="Task title"
             />
           </div>
@@ -108,7 +120,7 @@ export default function TaskModal({ task, users, onClose, onUpdate, onDelete }: 
               value={description}
               onChange={e => setDescription(e.target.value)}
               rows={3}
-              className="w-full border border-stone-200 rounded-xl px-3 py-2 text-sm text-stone-700 focus:outline-none focus:ring-2 focus:ring-rose-300 resize-none"
+              className="w-full border border-stone-200 rounded-xl px-3 py-2 text-sm text-stone-900 bg-white placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-emerald-300 resize-none"
               placeholder="Add notes, links, details…"
             />
           </div>
@@ -123,7 +135,7 @@ export default function TaskModal({ task, users, onClose, onUpdate, onDelete }: 
                   onClick={() => setStatus(s.value)}
                   className={`text-xs px-3 py-1.5 rounded-full font-medium transition ${
                     status === s.value
-                      ? s.color + ' ring-2 ring-offset-1 ring-rose-300'
+                      ? s.color + ' ring-2 ring-offset-1 ring-emerald-300'
                       : 'bg-stone-100 text-stone-400 hover:bg-stone-200'
                   }`}
                 >
@@ -133,19 +145,50 @@ export default function TaskModal({ task, users, onClose, onUpdate, onDelete }: 
             </div>
           </div>
 
-          {/* Assignee */}
+          {/* Assignees */}
           <div>
-            <label className="block text-xs font-medium text-stone-500 uppercase tracking-wide mb-1">Assigned to</label>
-            <select
-              value={assigneeId}
-              onChange={e => setAssigneeId(e.target.value)}
-              className="w-full border border-stone-200 rounded-xl px-3 py-2 text-sm text-stone-700 focus:outline-none focus:ring-2 focus:ring-rose-300"
-            >
-              <option value="">Unassigned</option>
-              {users.map(u => (
-                <option key={u.id} value={u.id}>{u.name ?? u.email}</option>
-              ))}
-            </select>
+            <label className="block text-xs font-medium text-stone-500 uppercase tracking-wide mb-2">Assigned to</label>
+            <div className="space-y-1">
+              {users.map(u => {
+                const checked = assigneeIds.includes(u.id);
+                return (
+                  <label
+                    key={u.id}
+                    className={`flex items-center gap-2.5 cursor-pointer rounded-xl px-3 py-2 transition ${
+                      checked ? 'bg-emerald-50 border border-emerald-200' : 'hover:bg-stone-50 border border-transparent'
+                    }`}
+                  >
+                    <input
+                      type="checkbox"
+                      className="sr-only"
+                      checked={checked}
+                      onChange={() => setAssigneeIds(prev =>
+                        prev.includes(u.id) ? prev.filter(id => id !== u.id) : [...prev, u.id]
+                      )}
+                    />
+                    <div className={`w-4 h-4 rounded border-2 flex items-center justify-center flex-shrink-0 transition pointer-events-none ${
+                      checked ? 'bg-emerald-500 border-emerald-500' : 'border-stone-300'
+                    }`}>
+                      {checked && (
+                        <svg className="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                        </svg>
+                      )}
+                    </div>
+                    {u.image
+                      ? <img src={u.image} className="w-6 h-6 rounded-full object-cover" alt="" />
+                      : (
+                        <div className="w-6 h-6 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center text-xs font-bold">
+                          {(u.name ?? u.email)[0]}
+                        </div>
+                      )
+                    }
+                    <span className="text-sm text-stone-700">{u.name ?? u.email}</span>
+                  </label>
+                );
+              })}
+              {users.length === 0 && <p className="text-xs text-stone-400 px-3">No users yet.</p>}
+            </div>
           </div>
 
           {/* Attachments */}
@@ -157,10 +200,10 @@ export default function TaskModal({ task, users, onClose, onUpdate, onDelete }: 
                   <li key={att.id} className="flex items-center gap-2 text-sm bg-stone-50 border border-stone-200 rounded-xl px-3 py-2">
                     <span>{fileIcon(att.mimetype)}</span>
                     <a
-                      href={`/uploads/${att.filename}`}
+                      href={att.filename}
                       target="_blank"
                       rel="noreferrer"
-                      className="flex-1 text-stone-700 hover:text-rose-500 truncate"
+                      className="flex-1 text-stone-700 hover:text-emerald-500 truncate"
                     >
                       {att.original}
                     </a>
@@ -217,7 +260,7 @@ export default function TaskModal({ task, users, onClose, onUpdate, onDelete }: 
             <button
               onClick={save}
               disabled={saving}
-              className="text-sm px-4 py-2 rounded-xl bg-rose-500 hover:bg-rose-600 text-white font-medium transition disabled:opacity-50"
+              className="text-sm px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-800 text-white font-medium transition disabled:opacity-50"
             >
               {saving ? 'Saving…' : 'Save'}
             </button>

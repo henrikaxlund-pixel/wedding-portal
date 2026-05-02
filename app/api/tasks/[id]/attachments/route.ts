@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/auth';
-import db from '@/lib/db';
+import sql from '@/lib/db';
+import { supabaseAdmin, storageUrl } from '@/lib/supabase';
 import path from 'path';
-import fs from 'fs';
-
-const UPLOAD_DIR = path.join(process.cwd(), 'public', 'uploads');
 
 export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const session = await auth();
@@ -17,20 +15,29 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
   if (!file) return NextResponse.json({ error: 'No file' }, { status: 400 });
 
   const ext = path.extname(file.name);
-  const filename = `${crypto.randomUUID()}${ext}`;
-  const filepath = path.join(UPLOAD_DIR, filename);
+  const storagePath = `${crypto.randomUUID()}${ext}`;
 
   const buffer = Buffer.from(await file.arrayBuffer());
-  fs.writeFileSync(filepath, buffer);
+  const { error: uploadError } = await supabaseAdmin.storage
+    .from('attachments')
+    .upload(storagePath, buffer, { contentType: file.type });
+
+  if (uploadError) {
+    console.error('Storage upload error:', uploadError);
+    return NextResponse.json({ error: 'Upload failed' }, { status: 500 });
+  }
 
   const id = crypto.randomUUID();
-  db.prepare(`
+  const [attachment] = await sql`
     INSERT INTO attachments (id, task_id, filename, original, mimetype, size)
-    VALUES (?, ?, ?, ?, ?, ?)
-  `).run(id, taskId, filename, file.name, file.type, file.size);
+    VALUES (${id}, ${taskId}, ${storagePath}, ${file.name}, ${file.type}, ${file.size})
+    RETURNING *
+  `;
 
-  const attachment = db.prepare('SELECT * FROM attachments WHERE id = ?').get(id);
-  return NextResponse.json(attachment, { status: 201 });
+  return NextResponse.json(
+    { ...attachment, filename: storageUrl('attachments', storagePath) },
+    { status: 201 },
+  );
 }
 
 export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -41,11 +48,10 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
   const attachmentId = searchParams.get('attachmentId');
   if (!attachmentId) return NextResponse.json({ error: 'Missing attachmentId' }, { status: 400 });
 
-  const att = db.prepare('SELECT * FROM attachments WHERE id = ?').get(attachmentId) as any;
+  const [att] = await sql`SELECT * FROM attachments WHERE id = ${attachmentId}`;
   if (att) {
-    const filepath = path.join(UPLOAD_DIR, att.filename);
-    if (fs.existsSync(filepath)) fs.unlinkSync(filepath);
-    db.prepare('DELETE FROM attachments WHERE id = ?').run(attachmentId);
+    await supabaseAdmin.storage.from('attachments').remove([att.filename]);
+    await sql`DELETE FROM attachments WHERE id = ${attachmentId}`;
   }
 
   return NextResponse.json({ ok: true });

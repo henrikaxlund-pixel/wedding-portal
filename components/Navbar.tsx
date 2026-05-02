@@ -1,8 +1,10 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
 import { signOut } from 'next-auth/react';
 import { useState } from 'react';
+import GuestCountBadge from './GuestCountBadge';
+import NavCountdown from './NavCountdown';
 
 interface NavbarProps {
   user?: {
@@ -19,23 +21,32 @@ export default function Navbar({ user }: NavbarProps) {
   return (
     <nav className="bg-white border-b border-stone-200 px-6 py-3 flex items-center justify-between">
       <div className="flex items-center gap-6">
-        <span className="text-lg font-semibold text-stone-800">💍 H & R</span>
+        <span className="text-lg font-semibold text-stone-800">💍 R & H</span>
         <div className="flex gap-4 text-sm">
-          <Link href="/planning" className="text-stone-700 hover:text-rose-500 font-medium transition">
+          <Link href="/planning" className="text-stone-700 hover:text-emerald-500 font-medium transition">
             Planning
           </Link>
-          <Link href="/guests" className="text-stone-400 hover:text-rose-500 transition">
+          <Link href="/planning/guests" className="text-stone-700 hover:text-emerald-500 font-medium transition">
+            Guests
+          </Link>
+          <Link href="/planning/program" className="text-stone-700 hover:text-emerald-500 font-medium transition">
+            Program
+          </Link>
+          <Link href="/guests" className="text-stone-400 hover:text-emerald-500 transition">
             Guest Page
           </Link>
           {(user as any)?.role === 'admin' && (
-            <Link href="/admin/users" className="text-stone-400 hover:text-rose-500 transition">
+            <Link href="/admin/users" className="text-stone-400 hover:text-emerald-500 transition">
               Users
             </Link>
           )}
         </div>
       </div>
 
-      <div className="relative">
+      <div className="flex items-center gap-3">
+        <NavCountdown />
+        <GuestCountBadge />
+        <div className="relative">
         <button
           onClick={() => setMenuOpen(!menuOpen)}
           className="flex items-center gap-2 text-sm text-stone-700 hover:text-stone-900 transition"
@@ -43,7 +54,7 @@ export default function Navbar({ user }: NavbarProps) {
           {user?.image ? (
             <img src={user.image} className="w-7 h-7 rounded-full" alt="" />
           ) : (
-            <div className="w-7 h-7 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center text-xs font-bold">
+            <div className="w-7 h-7 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center text-xs font-bold">
               {user?.name?.[0] ?? user?.email?.[0] ?? '?'}
             </div>
           )}
@@ -63,6 +74,7 @@ export default function Navbar({ user }: NavbarProps) {
             </button>
           </div>
         )}
+        </div>
       </div>
     </nav>
   );

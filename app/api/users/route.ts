@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/auth';
-import db from '@/lib/db';
+import sql from '@/lib/db';
 import { hash } from 'bcryptjs';
 
 export async function GET() {
   const session = await auth();
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-  const users = db.prepare('SELECT id, name, email, image, role, created_at FROM users').all();
+  const users = await sql`SELECT id, name, email, image, role, created_at FROM users`;
   return NextResponse.json(users);
 }
 
@@ -23,12 +23,12 @@ export async function POST(req: NextRequest) {
   const id = crypto.randomUUID();
   const hashedPassword = body.password ? await hash(body.password, 12) : null;
 
-  db.prepare(`
+  const [user] = await sql`
     INSERT INTO users (id, name, email, password, role)
-    VALUES (?, ?, ?, ?, ?)
-  `).run(id, body.name ?? null, body.email, hashedPassword, body.role ?? 'helper');
+    VALUES (${id}, ${body.name ?? null}, ${body.email}, ${hashedPassword}, ${body.role ?? 'dearest'})
+    RETURNING id, name, email, image, role, created_at
+  `;
 
-  const user = db.prepare('SELECT id, name, email, image, role, created_at FROM users WHERE id = ?').get(id);
   return NextResponse.json(user, { status: 201 });
 }
 
@@ -42,6 +42,6 @@ export async function DELETE(req: NextRequest) {
   const userId = searchParams.get('id');
   if (!userId) return NextResponse.json({ error: 'Missing id' }, { status: 400 });
 
-  db.prepare('DELETE FROM users WHERE id = ?').run(userId);
+  await sql`DELETE FROM users WHERE id = ${userId}`;
   return NextResponse.json({ ok: true });
 }

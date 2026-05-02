@@ -1,36 +1,48 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/auth';
-import db from '@/lib/db';
+import sql from '@/lib/db';
 
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const session = await auth();
-  if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  try {
+    const session = await auth();
+    if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-  const { id } = await params;
-  const body = await req.json();
+    const { id } = await params;
+    const body = await req.json();
 
-  const fields: string[] = [];
-  const values: any[] = [];
+    // Handle multi-assignee via junction table
+    if (body.assignee_ids !== undefined) {
+      await sql`DELETE FROM task_assignees WHERE task_id = ${id}`;
+      for (const userId of (body.assignee_ids as string[])) {
+        await sql`INSERT INTO task_assignees (task_id, user_id) VALUES (${id}, ${userId}) ON CONFLICT DO NOTHING`;
+      }
+    }
 
-  if (body.title !== undefined)       { fields.push('title = ?');       values.push(body.title); }
-  if (body.description !== undefined) { fields.push('description = ?'); values.push(body.description); }
-  if (body.status !== undefined)      { fields.push('status = ?');      values.push(body.status); }
-  if (body.assignee_id !== undefined) { fields.push('assignee_id = ?'); values.push(body.assignee_id); }
-  if (body.column !== undefined)      { fields.push('column = ?');      values.push(body.column); }
-  if (body.position !== undefined)    { fields.push('position = ?');    values.push(body.position); }
+    const updates: Record<string, any> = {};
+    if (body.title       !== undefined) updates.title       = body.title;
+    if (body.description !== undefined) updates.description = body.description;
+    if (body.status      !== undefined) updates.status      = body.status;
+    if (body.column      !== undefined) updates.column      = body.column;
+    if (body.position    !== undefined) updates.position    = body.position;
 
-  fields.push('updated_at = datetime("now")');
-  values.push(id);
+    if (Object.keys(updates).length > 0) {
+      updates.updated_at = new Date();
+      await sql`UPDATE tasks SET ${sql(updates)} WHERE id = ${id}`;
+    }
 
-  db.prepare(`UPDATE tasks SET ${fields.join(', ')} WHERE id = ?`).run(...values);
+    const [task] = await sql`SELECT * FROM tasks WHERE id = ${id}`;
+    const assigneeRows = await sql`
+      SELECT u.id, u.name, u.image
+      FROM task_assignees ta
+      JOIN users u ON ta.user_id = u.id
+      WHERE ta.task_id = ${id}
+    `;
 
-  const task = db.prepare(`
-    SELECT t.*, u.name as assignee_name, u.image as assignee_image
-    FROM tasks t LEFT JOIN users u ON t.assignee_id = u.id
-    WHERE t.id = ?
-  `).get(id);
-
-  return NextResponse.json(task);
+    return NextResponse.json(task ? { ...task, assignees: assigneeRows } : { error: 'Not found' });
+  } catch (e: any) {
+    console.error('PATCH /api/tasks/[id] error:', e);
+    return NextResponse.json({ error: e.message }, { status: 500 });
+  }
 }
 
 export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -38,6 +50,6 @@ export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ 
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   const { id } = await params;
-  db.prepare('DELETE FROM tasks WHERE id = ?').run(id);
+  await sql`DELETE FROM tasks WHERE id = ${id}`;
   return NextResponse.json({ ok: true });
 }

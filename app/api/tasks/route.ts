@@ -1,26 +1,33 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/auth';
-import db from '@/lib/db';
+import sql from '@/lib/db';
+import { storageUrl } from '@/lib/supabase';
 
 export async function GET() {
   const session = await auth();
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-  const tasks = db.prepare(`
-    SELECT t.*, u.name as assignee_name, u.image as assignee_image
-    FROM tasks t
-    LEFT JOIN users u ON t.assignee_id = u.id
-    ORDER BY t.column, t.position
-  `).all();
+  const tasks = await sql`SELECT * FROM tasks ORDER BY "column", position`;
 
-  const attachments = db.prepare('SELECT * FROM attachments').all();
+  const assigneeRows = await sql`
+    SELECT ta.task_id, u.id, u.name, u.image
+    FROM task_assignees ta
+    JOIN users u ON ta.user_id = u.id
+  `;
 
-  const tasksWithAttachments = tasks.map((task: any) => ({
+  const attachments = await sql`SELECT * FROM attachments`;
+
+  const tasksWithData = tasks.map((task: any) => ({
     ...task,
-    attachments: attachments.filter((a: any) => a.task_id === task.id),
+    assignees: assigneeRows
+      .filter((a: any) => a.task_id === task.id)
+      .map((a: any) => ({ id: a.id, name: a.name, image: a.image })),
+    attachments: attachments
+      .filter((a: any) => a.task_id === task.id)
+      .map((a: any) => ({ ...a, filename: storageUrl('attachments', a.filename) })),
   }));
 
-  return NextResponse.json(tasksWithAttachments);
+  return NextResponse.json(tasksWithData);
 }
 
 export async function POST(req: NextRequest) {
@@ -30,16 +37,14 @@ export async function POST(req: NextRequest) {
   const body = await req.json();
   const id = crypto.randomUUID();
 
-  const maxPos = db.prepare('SELECT MAX(position) as mp FROM tasks WHERE column = ?')
-    .get(body.column) as any;
+  const [maxPos] = await sql`SELECT MAX(position) AS mp FROM tasks WHERE "column" = ${body.column}`;
   const position = (maxPos?.mp ?? -1) + 1;
 
-  db.prepare(`
-    INSERT INTO tasks (id, column, title, description, assignee_id, status, position)
-    VALUES (?, ?, ?, ?, ?, ?, ?)
-  `).run(id, body.column, body.title, body.description ?? null,
-    body.assignee_id ?? null, body.status ?? 'not_started', position);
+  const [task] = await sql`
+    INSERT INTO tasks (id, "column", title, description, status, position)
+    VALUES (${id}, ${body.column}, ${body.title}, ${body.description ?? null}, ${'not_started'}, ${position})
+    RETURNING *
+  `;
 
-  const task = db.prepare('SELECT * FROM tasks WHERE id = ?').get(id);
   return NextResponse.json(task, { status: 201 });
 }

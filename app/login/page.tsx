@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { signIn } from 'next-auth/react';
 import { useState } from 'react';
@@ -32,7 +32,7 @@ export default function LoginPage() {
         {/* Header */}
         <div className="text-center mb-8">
           <div className="text-4xl mb-3">💍</div>
-          <h1 className="text-2xl font-semibold text-stone-800">Henrik & Riina</h1>
+          <h1 className="text-2xl font-semibold text-stone-800">Riina & Henrik</h1>
           <p className="text-stone-500 text-sm mt-1">21 December 2026 · Helsinki</p>
         </div>
 
@@ -66,7 +66,7 @@ export default function LoginPage() {
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 required
-                className="w-full border border-stone-300 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-300"
+                className="w-full border border-stone-300 rounded-xl px-3 py-2.5 text-sm text-stone-900 bg-white placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-emerald-300"
                 placeholder="you@example.com"
               />
             </div>
@@ -77,7 +77,7 @@ export default function LoginPage() {
                 value={password}
                 onChange={e => setPassword(e.target.value)}
                 required
-                className="w-full border border-stone-300 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-300"
+                className="w-full border border-stone-300 rounded-xl px-3 py-2.5 text-sm text-stone-900 bg-white placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-emerald-300"
                 placeholder="••••••••"
               />
             </div>
@@ -85,7 +85,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-rose-500 hover:bg-rose-600 text-white rounded-xl py-2.5 font-medium transition disabled:opacity-50"
+              className="w-full bg-emerald-500 hover:bg-emerald-800 text-white rounded-xl py-2.5 font-medium transition disabled:opacity-50"
             >
               {loading ? 'Signing in…' : 'Sign in'}
             </button>

@@ -6,8 +6,8 @@ import SessionProvider from "@/components/SessionProvider";
 const geist = Geist({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Henrik & Riina · Wedding Portal",
-  description: "Wedding planning portal for Henrik & Riina, 21 December 2026, Helsinki",
+  title: "Riina & Henrik · Wedding Portal",
+  description: "Wedding planning portal for Riina & Henrik, 21 December 2026, Helsinki",
 };
 
 export default function RootLayout({

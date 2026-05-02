@@ -32,8 +32,8 @@ db.exec(`
   )
 `);
 
-const EMAIL = 'henrik@example.com'; // Change to your real email
-const PASSWORD = 'changeme123';     // Change to your real password
+const EMAIL = 'henrik.axlund@gmail.com'; // Change to your real email
+const PASSWORD = 'rinrikrinrik';     // Change to your real password
 const NAME = 'Henrik';
 
 const existing = db.prepare('SELECT id FROM users WHERE email = ?').get(EMAIL);

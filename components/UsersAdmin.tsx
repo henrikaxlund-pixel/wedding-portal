@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 
@@ -15,7 +15,7 @@ export default function UsersAdmin() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
-  const [form, setForm] = useState({ name: '', email: '', password: '', role: 'helper' });
+  const [form, setForm] = useState({ name: '', email: '', password: '', role: 'dearest' });
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
 
@@ -40,7 +40,7 @@ export default function UsersAdmin() {
     } else {
       const user = await res.json();
       setUsers(prev => [...prev, user]);
-      setForm({ name: '', email: '', password: '', role: 'helper' });
+      setForm({ name: '', email: '', password: '', role: 'dearest' });
       setShowForm(false);
     }
     setSubmitting(false);
@@ -63,7 +63,7 @@ export default function UsersAdmin() {
         )}
         {users.map(u => (
           <div key={u.id} className="flex items-center gap-3 px-5 py-3">
-            <div className="w-8 h-8 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center text-sm font-bold overflow-hidden shrink-0">
+            <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center text-sm font-bold overflow-hidden shrink-0">
               {u.image
                 ? <img src={u.image} className="w-full h-full object-cover" alt="" />
                 : (u.name?.[0] ?? u.email[0]).toUpperCase()}
@@ -72,7 +72,7 @@ export default function UsersAdmin() {
               <p className="text-sm font-medium text-stone-800 truncate">{u.name ?? '—'}</p>
               <p className="text-xs text-stone-400 truncate">{u.email}</p>
             </div>
-            <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${u.role === 'admin' ? 'bg-rose-100 text-rose-600' : 'bg-stone-100 text-stone-500'}`}>
+            <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${u.role === 'admin' ? 'bg-emerald-100 text-emerald-800' : 'bg-stone-100 text-stone-1000'}`}>
               {u.role}
             </span>
             <button
@@ -98,7 +98,7 @@ export default function UsersAdmin() {
               <input
                 value={form.name}
                 onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
-                className="w-full border border-stone-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-rose-300"
+                className="w-full border border-stone-200 rounded-xl px-3 py-2 text-sm text-stone-900 bg-white placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-emerald-300"
                 placeholder="Full name"
               />
             </div>
@@ -107,9 +107,9 @@ export default function UsersAdmin() {
               <select
                 value={form.role}
                 onChange={e => setForm(f => ({ ...f, role: e.target.value }))}
-                className="w-full border border-stone-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-rose-300"
+                className="w-full border border-stone-200 rounded-xl px-3 py-2 text-sm text-stone-900 bg-white placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-emerald-300"
               >
-                <option value="helper">Helper</option>
+                <option value="helper">Dearest</option>
                 <option value="admin">Admin</option>
               </select>
             </div>
@@ -121,8 +121,8 @@ export default function UsersAdmin() {
               type="email"
               value={form.email}
               onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
-              className="w-full border border-stone-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-rose-300"
-              placeholder="helper@example.com"
+              className="w-full border border-stone-200 rounded-xl px-3 py-2 text-sm text-stone-900 bg-white placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-emerald-300"
+              placeholder="friend@example.com"
             />
           </div>
           <div>
@@ -131,7 +131,7 @@ export default function UsersAdmin() {
               type="password"
               value={form.password}
               onChange={e => setForm(f => ({ ...f, password: e.target.value }))}
-              className="w-full border border-stone-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-rose-300"
+              className="w-full border border-stone-200 rounded-xl px-3 py-2 text-sm text-stone-900 bg-white placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-emerald-300"
               placeholder="••••••••"
             />
           </div>
@@ -140,7 +140,7 @@ export default function UsersAdmin() {
             <button
               type="submit"
               disabled={submitting}
-              className="bg-rose-500 hover:bg-rose-600 text-white text-sm px-4 py-2 rounded-xl font-medium transition disabled:opacity-50"
+              className="bg-emerald-500 hover:bg-emerald-800 text-white text-sm px-4 py-2 rounded-xl font-medium transition disabled:opacity-50"
             >
               {submitting ? 'Adding…' : 'Add user'}
             </button>
@@ -156,7 +156,7 @@ export default function UsersAdmin() {
       ) : (
         <button
           onClick={() => setShowForm(true)}
-          className="flex items-center gap-2 text-sm text-rose-500 hover:text-rose-600 font-medium transition"
+          className="flex items-center gap-2 text-sm text-emerald-500 hover:text-emerald-800 font-medium transition"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />

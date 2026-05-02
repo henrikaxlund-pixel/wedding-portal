@@ -1,6 +1,6 @@
-'use client';
+﻿'use client';
 
-import { Task, Status } from './KanbanBoard';
+import { Task, Status, Assignee } from './KanbanBoard';
 
 const STATUS_CONFIG: Record<Status, { label: string; color: string }> = {
   not_started: { label: 'Not started', color: 'bg-stone-100 text-stone-500' },
@@ -53,15 +53,25 @@ export default function TaskCard({ task, onClick, onStatusChange }: Props) {
             </span>
           )}
 
-          {/* Assignee avatar */}
-          {task.assignee_name && (
-            <div
-              title={task.assignee_name}
-              className="w-5 h-5 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center text-xs font-bold overflow-hidden"
-            >
-              {task.assignee_image
-                ? <img src={task.assignee_image} className="w-full h-full object-cover" alt="" />
-                : task.assignee_name[0]}
+          {/* Assignee avatars */}
+          {task.assignees.length > 0 && (
+            <div className="flex -space-x-1.5">
+              {task.assignees.slice(0, 3).map(a => (
+                <div
+                  key={a.id}
+                  title={a.name ?? ''}
+                  className="w-5 h-5 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center text-xs font-bold overflow-hidden ring-1 ring-white"
+                >
+                  {a.image
+                    ? <img src={a.image} className="w-full h-full object-cover" alt="" />
+                    : (a.name ?? '?')[0]}
+                </div>
+              ))}
+              {task.assignees.length > 3 && (
+                <div className="w-5 h-5 rounded-full bg-stone-200 text-stone-600 flex items-center justify-center text-xs font-bold ring-1 ring-white">
+                  +{task.assignees.length - 3}
+                </div>
+              )}
             </div>
           )}
         </div>
