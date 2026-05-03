@@ -1,13 +1,20 @@
 ﻿'use client';
 
 import { signIn } from 'next-auth/react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('error') === 'NotWhitelisted') {
+      setError("You're not on the guest list yet. Ask Henrik or Riina to add you.");
+    }
+  }, []);
 
   async function handleCredentials(e: React.FormEvent) {
     e.preventDefault();
@@ -37,6 +44,9 @@ export default function LoginPage() {
         </div>
 
         <div className="bg-white rounded-2xl shadow-sm border border-stone-200 p-8 space-y-6">
+          {error && !loading && (
+            <p className="text-sm text-red-500 bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-center">{error}</p>
+          )}
           {/* Google */}
           <button
             onClick={() => signIn('google', { callbackUrl: '/planning' })}

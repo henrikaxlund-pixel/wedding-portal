@@ -14,9 +14,10 @@ function PostgresAdapter(): Adapter {
   return {
     async createUser(user) {
       const id = crypto.randomUUID();
+      // Auto-created OAuth users are blocked until an admin pre-adds their email
       await sql`
-        INSERT INTO users (id, name, email, email_verified, image)
-        VALUES (${id}, ${user.name ?? null}, ${user.email ?? ''}, ${user.emailVerified ?? null}, ${user.image ?? null})
+        INSERT INTO users (id, name, email, email_verified, image, role)
+        VALUES (${id}, ${user.name ?? null}, ${user.email ?? ''}, ${user.emailVerified ?? null}, ${user.image ?? null}, 'blocked')
       `;
       return { ...user, id } as any;
     },
@@ -173,6 +174,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     signIn: '/login',
   },
   callbacks: {
+    async signIn({ user }) {
+      if (!user?.email) return false;
+      const [row] = await sql`SELECT role FROM users WHERE email = ${user.email}`;
+      // Block anyone not pre-added, or who was auto-created (role = 'blocked')
+      if (!row || row.role === 'blocked') return '/login?error=NotWhitelisted';
+      return true;
+    },
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
