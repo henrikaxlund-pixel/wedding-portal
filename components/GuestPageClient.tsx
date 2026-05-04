@@ -181,11 +181,11 @@ export default function GuestPageClient({ initialContent, isEditor }: Props) {
         </div>
       )}
 
-      {/* Page content */}
-      <div className={`flex-1 flex flex-col items-center ${isEditor ? 'pt-14' : ''}`}>
+      {/* Page content — single flex column so all gaps are equal */}
+      <div className={`flex-1 flex flex-col items-center gap-14 px-6 ${isEditor ? 'pt-24' : 'pt-20'} pb-24`}>
 
-        {/* Hero */}
-        <section className="w-full flex flex-col items-center justify-center text-center px-6 py-20 gap-6">
+        {/* Hero text group */}
+        <div className="flex flex-col items-center text-center gap-6 w-full">
           <EditableText
             value={content.hero_title}
             editing={editing}
@@ -211,38 +211,32 @@ export default function GuestPageClient({ initialContent, isEditor }: Props) {
             fontFamily="var(--font-cinzel)"
             multiline
           />
-          {/* Divider sits inside hero so gap-6 keeps spacing uniform */}
-          <div className="w-64 h-px opacity-30" style={{ backgroundColor: textColor }} />
-        </section>
+        </div>
+
+        {/* Divider */}
+        <div className="w-64 h-px opacity-30" style={{ backgroundColor: textColor }} />
 
         {/* RSVP button */}
-        <section className="w-full flex flex-col items-center px-6 py-12">
-          <a
-            href="/rsvp"
-            className="border border-white/40 hover:border-white/70 px-20 py-6 text-center transition hover:bg-white/5"
-            style={{ fontFamily: 'var(--font-cinzel)' }}
-          >
-            <span
-              className="block text-xl tracking-[0.4em] uppercase"
-              style={{ color: textColor }}
-            >
-              RSVP
-            </span>
-          </a>
-        </section>
+        <a
+          href="/rsvp"
+          className="border border-white/40 hover:border-white/70 px-20 py-6 text-center transition hover:bg-white/5"
+          style={{ fontFamily: 'var(--font-cinzel)' }}
+        >
+          <span className="block text-xl tracking-[0.4em] uppercase" style={{ color: textColor }}>
+            RSVP
+          </span>
+        </a>
 
         {/* Countdown */}
-        <section className="w-full flex flex-col items-center py-8 px-6 gap-4">
-          <Countdown textColor={textColor} />
-        </section>
+        <Countdown textColor={textColor} />
 
         {/* Dynamic modules */}
         {modules.map(mod => (
-          <section key={mod.id} className="w-full max-w-2xl px-6 py-12 flex flex-col items-center text-center gap-4 relative group">
+          <div key={mod.id} className="w-full max-w-2xl flex flex-col items-center text-center gap-4 relative group">
             {editing && (
               <button
                 onClick={() => deleteModule(mod.id)}
-                className="absolute top-4 right-4 text-white/30 hover:text-red-400 transition bg-black/30 p-1.5"
+                className="absolute top-0 right-0 text-white/30 hover:text-red-400 transition bg-black/30 p-1.5"
                 title="Delete section"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -250,7 +244,7 @@ export default function GuestPageClient({ initialContent, isEditor }: Props) {
                 </svg>
               </button>
             )}
-            <div className="w-16 h-px opacity-20 mb-2" style={{ backgroundColor: textColor }} />
+            <div className="w-16 h-px opacity-20" style={{ backgroundColor: textColor }} />
             <EditableText
               value={mod.title}
               editing={editing}
@@ -269,21 +263,20 @@ export default function GuestPageClient({ initialContent, isEditor }: Props) {
               multiline
               placeholder="Add content here…"
             />
-          </section>
+          </div>
         ))}
 
         {/* Add section prompt in edit mode when no modules */}
         {editing && modules.length === 0 && (
           <button
             onClick={addModule}
-            className="mt-4 text-white/40 hover:text-white/70 border border-white/20 hover:border-white/40 px-8 py-4 text-sm transition"
+            className="text-white/40 hover:text-white/70 border border-white/20 hover:border-white/40 px-8 py-4 text-sm transition"
             style={{ fontFamily: 'var(--font-cinzel)' }}
           >
             + Add a section (venue, program, etc.)
           </button>
         )}
 
-        <div className="h-24" />
       </div>
     </div>
   );
