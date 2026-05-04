@@ -15,6 +15,7 @@ export default function UsersAdmin() {
   const [users, setUsers] = useState<User[]>([]);
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
+  const [password, setPassword] = useState('');
   const [role, setRole] = useState<'dearest' | 'admin'>('dearest');
   const [adding, setAdding] = useState(false);
   const [error, setError] = useState('');
@@ -30,7 +31,7 @@ export default function UsersAdmin() {
     const res = await fetch('/api/users', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, name: name || null, role }),
+      body: JSON.stringify({ email, name: name || null, password: password || undefined, role }),
     });
     if (!res.ok) {
       const err = await res.json();
@@ -40,6 +41,7 @@ export default function UsersAdmin() {
       setUsers(prev => [...prev, user]);
       setEmail('');
       setName('');
+      setPassword('');
       setRole('dearest');
     }
     setAdding(false);
@@ -74,6 +76,13 @@ export default function UsersAdmin() {
               placeholder="Name (optional)"
               className="flex-1 min-w-40 border border-stone-300 rounded-xl px-3 py-2 text-sm text-stone-900 focus:outline-none focus:ring-2 focus:ring-emerald-300"
             />
+            <input
+              type="text"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              placeholder="Password (non-Google)"
+              className="flex-1 min-w-40 border border-stone-300 rounded-xl px-3 py-2 text-sm text-stone-900 focus:outline-none focus:ring-2 focus:ring-emerald-300"
+            />
             <select
               value={role}
               onChange={e => setRole(e.target.value as any)}
@@ -92,7 +101,7 @@ export default function UsersAdmin() {
           </div>
           {error && <p className="text-sm text-red-500">{error}</p>}
           <p className="text-xs text-stone-600">
-            They can sign in with Google once added. Status shows "Signed in" after their first login.
+            Google users: leave password blank — they sign in with Google once added. Non-Google users: set a password here and share it with them manually.
           </p>
         </form>
       </div>
