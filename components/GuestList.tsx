@@ -208,8 +208,8 @@ export default function GuestList() {
         { label: "Henrik's guests", side: 'henrik' as const, familyLabel: "Henrik's family", familyValue: 'henrik_family' },
       ].map(section => {
         const all = guests.filter(g => g.side === section.side).sort(byName);
-        const regular = sortWithCouples(all.filter(g => !g.family_group));
         const family  = sortWithCouples(all.filter(g => g.family_group === section.familyValue));
+        const regular = sortWithCouples(all.filter(g => g.family_group !== section.familyValue));
         const pairColors = computePairColors(all);
         const renderRows = (list: Guest[]) => list.map(guest => (
           <tr key={guest.id} className="hover:bg-stone-50 group">
