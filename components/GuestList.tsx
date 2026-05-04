@@ -65,8 +65,8 @@ export default function GuestList() {
   }
 
   async function cycleFamily(guest: Guest) {
-    const order = [null, 'riina_family', 'henrik_family'];
-    const next = order[(order.indexOf(guest.family_group) + 1) % order.length];
+    const correctGroup = guest.side === 'riina' ? 'riina_family' : 'henrik_family';
+    const next = guest.family_group === correctGroup ? null : correctGroup;
     await patchGuest(guest.id, { family_group: next });
   }
 
@@ -239,7 +239,7 @@ export default function GuestList() {
                                 FAMILY_GROUPS.find(f => f.value === guest.family_group)?.color ?? 'bg-stone-100 text-stone-600'
                               }`}
                             >
-                              {guest.family_group === 'riina_family' ? 'R.fam' : 'H.fam'}
+                              Fam
                             </button>
                           ) : (
                             <button
