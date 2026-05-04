@@ -332,19 +332,16 @@ export default function GuestPageClient({ initialContent, isEditor }: Props) {
           />
         </section>
 
-        {/* Countdown */}
-        <section className="w-full flex flex-col items-center py-16 px-6 gap-6">
-          <p className="text-xs uppercase tracking-[0.3em] opacity-50" style={{ color: textColor }}>
-            Until the solstice
-          </p>
-          <Countdown textColor={textColor} />
-        </section>
-
         {/* RSVP */}
         <section className="w-full max-w-2xl px-6 py-12 flex flex-col items-center gap-6">
           <div className="w-16 h-px opacity-20" style={{ backgroundColor: textColor }} />
           <p className="text-xs uppercase tracking-[0.3em] opacity-50" style={{ color: textColor }}>RSVP</p>
           <RsvpSection textColor={textColor} />
+        </section>
+
+        {/* Countdown */}
+        <section className="w-full flex flex-col items-center py-16 px-6 gap-6">
+          <Countdown textColor={textColor} />
         </section>
 
         {/* Dynamic modules */}
