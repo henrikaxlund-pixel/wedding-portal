@@ -3,128 +3,6 @@
 import { useState, useRef } from 'react';
 import Countdown from './Countdown';
 
-function RsvpSection({ textColor }: { textColor: string }) {
-  const [name, setName]       = useState('');
-  const [email, setEmail]     = useState('');
-  const [response, setResponse] = useState<'accepted' | 'declined' | null>(null);
-  const [message, setMessage] = useState('');
-  const [submitting, setSubmitting] = useState(false);
-  const [done, setDone]       = useState(false);
-  const [error, setError]     = useState('');
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    if (!response) { setError('Please select yes or no.'); return; }
-    setSubmitting(true);
-    setError('');
-    try {
-      const res = await fetch('/api/rsvp', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email: email || null, response, message: message || null }),
-      });
-      if (!res.ok) throw new Error('Something went wrong.');
-      setDone(true);
-    } catch (e: any) {
-      setError(e.message ?? 'Something went wrong.');
-    } finally {
-      setSubmitting(false);
-    }
-  }
-
-  if (done) {
-    return (
-      <div className="text-center space-y-3 py-4">
-        <div className="text-4xl">{response === 'accepted' ? '🥂' : '💌'}</div>
-        <p className="text-lg font-semibold" style={{ color: textColor }}>
-          {response === 'accepted' ? 'See you there!' : 'Thanks for letting us know'}
-        </p>
-        <p className="opacity-60 text-sm" style={{ color: textColor }}>
-          {response === 'accepted'
-            ? `We're so happy you can join us, ${name.split(' ')[0]}!`
-            : `You'll be missed, ${name.split(' ')[0]}.`}
-        </p>
-      </div>
-    );
-  }
-
-  const inputCls = "w-full bg-white/10 border border-white/20 rounded-xl px-3 py-2.5 text-sm placeholder:opacity-40 focus:outline-none focus:border-white/50";
-
-  return (
-    <form onSubmit={handleSubmit} className="w-full max-w-sm mx-auto space-y-4">
-      {/* Name */}
-      <input
-        type="text"
-        required
-        value={name}
-        onChange={e => setName(e.target.value)}
-        placeholder="Your name"
-        className={inputCls}
-        style={{ color: textColor }}
-      />
-
-      {/* Yes / No */}
-      <div className="grid grid-cols-2 gap-3">
-        <button
-          type="button"
-          onClick={() => setResponse('accepted')}
-          className={`py-3 rounded-xl border-2 text-sm font-semibold transition ${
-            response === 'accepted'
-              ? 'bg-white/20 border-white/60'
-              : 'bg-transparent border-white/20 hover:border-white/40'
-          }`}
-          style={{ color: textColor }}
-        >
-          🥂 Yes, I'll be there!
-        </button>
-        <button
-          type="button"
-          onClick={() => setResponse('declined')}
-          className={`py-3 rounded-xl border-2 text-sm font-semibold transition ${
-            response === 'declined'
-              ? 'bg-white/20 border-white/60'
-              : 'bg-transparent border-white/20 hover:border-white/40'
-          }`}
-          style={{ color: textColor }}
-        >
-          💌 Sorry, I can't
-        </button>
-      </div>
-
-      {/* Email */}
-      <input
-        type="email"
-        value={email}
-        onChange={e => setEmail(e.target.value)}
-        placeholder="Email (optional)"
-        className={inputCls}
-        style={{ color: textColor }}
-      />
-
-      {/* Message */}
-      <textarea
-        value={message}
-        onChange={e => setMessage(e.target.value)}
-        placeholder="Message (optional)"
-        rows={2}
-        className={`${inputCls} resize-none`}
-        style={{ color: textColor }}
-      />
-
-      {error && <p className="text-red-400 text-sm text-center">{error}</p>}
-
-      <button
-        type="submit"
-        disabled={submitting || !name.trim() || !response}
-        className="w-full py-3 rounded-xl font-semibold text-sm transition bg-white/15 hover:bg-white/25 border border-white/30 disabled:opacity-40"
-        style={{ color: textColor }}
-      >
-        {submitting ? 'Sending…' : 'Send RSVP'}
-      </button>
-    </form>
-  );
-}
-
 type Content = Record<string, string>;
 
 export interface Module {
@@ -332,15 +210,23 @@ export default function GuestPageClient({ initialContent, isEditor }: Props) {
           />
         </section>
 
-        {/* RSVP */}
-        <section className="w-full max-w-2xl px-6 py-12 flex flex-col items-center gap-6">
-          <div className="w-16 h-px opacity-20" style={{ backgroundColor: textColor }} />
-          <p className="text-xs uppercase tracking-[0.3em] opacity-50" style={{ color: textColor }}>RSVP</p>
-          <RsvpSection textColor={textColor} />
+        {/* RSVP button */}
+        <section className="w-full flex flex-col items-center px-6 pb-12">
+          <a
+            href="/rsvp"
+            className="border-2 border-white/30 hover:border-white/60 rounded-2xl px-16 py-6 text-center transition hover:bg-white/5"
+          >
+            <span className="block text-xs uppercase tracking-[0.3em] opacity-50 mb-1" style={{ color: textColor }}>
+              Please reply by
+            </span>
+            <span className="block text-2xl font-semibold" style={{ color: textColor }}>
+              RSVP
+            </span>
+          </a>
         </section>
 
         {/* Countdown */}
-        <section className="w-full flex flex-col items-center py-16 px-6 gap-6">
+        <section className="w-full flex flex-col items-center py-8 px-6 gap-4">
           <Countdown textColor={textColor} />
         </section>
 

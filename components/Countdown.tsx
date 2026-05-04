@@ -45,7 +45,7 @@ export default function Countdown({ textColor = '#f5f0e8' }: Props) {
       {units.map(u => (
         <div key={u.label} className="flex flex-col items-center">
           <span
-            className="text-6xl sm:text-8xl font-bold tabular-nums leading-none"
+            className="text-3xl sm:text-4xl font-bold tabular-nums leading-none"
             style={{ color: textColor }}
           >
             {String(u.value).padStart(2, '0')}
