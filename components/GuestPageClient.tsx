@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState, useRef } from 'react';
 import Countdown from './Countdown';
@@ -86,7 +86,7 @@ export default function GuestPageClient({ initialContent, isEditor }: Props) {
       {/* Editor toolbar */}
       {isEditor && (
         <div className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-sm text-white px-4 py-2 flex items-center gap-3 text-sm">
-          <span className="text-stone-400 text-xs font-medium">Guest page editor</span>
+          <span className="text-stone-600 text-xs font-medium">Guest page editor</span>
           <div className="flex-1" />
 
           {editing ? (
@@ -97,11 +97,11 @@ export default function GuestPageClient({ initialContent, isEditor }: Props) {
                   onClick={() => setBgPickerOpen(p => !p)}
                   className="flex items-center gap-1.5 bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-lg transition"
                 >
-                  🎨 Background
+                  ðŸŽ¨ Background
                 </button>
                 {bgPickerOpen && (
                   <div className="absolute top-full right-0 mt-2 bg-stone-900 border border-stone-700 rounded-2xl p-4 w-72 space-y-4 shadow-xl">
-                    <p className="text-xs text-stone-400 uppercase tracking-wide">Background color</p>
+                    <p className="text-xs text-stone-600 uppercase tracking-wide">Background color</p>
                     <div className="flex items-center gap-3">
                       <input
                         type="color"
@@ -117,20 +117,20 @@ export default function GuestPageClient({ initialContent, isEditor }: Props) {
                         placeholder="#1a1a2e"
                       />
                     </div>
-                    <p className="text-xs text-stone-400 uppercase tracking-wide">Or upload image</p>
+                    <p className="text-xs text-stone-600 uppercase tracking-wide">Or upload image</p>
                     <label className="flex items-center gap-2 cursor-pointer bg-stone-800 hover:bg-stone-700 border border-stone-600 rounded-xl px-3 py-2 text-sm transition">
-                      📷 Choose image
+                      ðŸ“· Choose image
                       <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={uploadBg} />
                     </label>
                     {content.background_type === 'image' && (
                       <button
                         onClick={() => { update('background_type', 'color'); update('background_value', '#1a1a2e'); }}
-                        className="text-xs text-stone-400 hover:text-white transition"
+                        className="text-xs text-stone-600 hover:text-white transition"
                       >
-                        ✕ Remove image
+                        âœ• Remove image
                       </button>
                     )}
-                    <p className="text-xs text-stone-400 uppercase tracking-wide">Text color</p>
+                    <p className="text-xs text-stone-600 uppercase tracking-wide">Text color</p>
                     <div className="flex items-center gap-3">
                       <input
                         type="color"
@@ -161,11 +161,11 @@ export default function GuestPageClient({ initialContent, isEditor }: Props) {
                 disabled={saving}
                 className="bg-emerald-600 hover:bg-emerald-700 px-4 py-1.5 rounded-lg font-medium transition disabled:opacity-50"
               >
-                {saving ? 'Saving…' : 'Save'}
+                {saving ? 'Savingâ€¦' : 'Save'}
               </button>
               <button
                 onClick={cancel}
-                className="text-stone-400 hover:text-white px-3 py-1.5 rounded-lg transition"
+                className="text-stone-600 hover:text-white px-3 py-1.5 rounded-lg transition"
               >
                 Cancel
               </button>
@@ -175,7 +175,7 @@ export default function GuestPageClient({ initialContent, isEditor }: Props) {
               onClick={() => setEditing(true)}
               className="flex items-center gap-1.5 bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-lg transition"
             >
-              ✏️ Edit page
+              âœï¸ Edit page
             </button>
           )}
         </div>
@@ -247,7 +247,7 @@ export default function GuestPageClient({ initialContent, isEditor }: Props) {
               textColor={textColor}
               className="opacity-70 whitespace-pre-wrap leading-relaxed"
               multiline
-              placeholder="Add content here…"
+              placeholder="Add content hereâ€¦"
             />
           </section>
         ))}

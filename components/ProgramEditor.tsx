@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 
@@ -98,10 +98,10 @@ export default function ProgramEditor() {
     await Promise.all([patch(a.id, { position: b.position }), patch(b.id, { position: a.position })]);
   }
 
-  if (loading) return <div className="text-stone-400 text-sm py-4">Loading program…</div>;
+  if (loading) return <div className="text-stone-600 text-sm py-4">Loading programâ€¦</div>;
 
   // Determine where to insert the solstice marker
-  // It goes after the last item whose start time is ≤ solstice time,
+  // It goes after the last item whose start time is â‰¤ solstice time,
   // or before everything if all items start after the solstice.
   let solsticeAfterIndex: number | null = null; // insert after items[solsticeAfterIndex]
   let solsticeBeforeAll = false;
@@ -131,7 +131,7 @@ export default function ProgramEditor() {
       <div className="flex items-center justify-between px-6 py-4 border-b border-stone-100">
         <div>
           <h2 className="font-semibold text-stone-800">Wedding Program</h2>
-          <p className="text-xs text-stone-400 mt-0.5">Click any field to edit · use ↑↓ to reorder</p>
+          <p className="text-xs text-stone-600 mt-0.5">Click any field to edit Â· use â†‘â†“ to reorder</p>
         </div>
         {!adding && (
           <button
@@ -148,8 +148,8 @@ export default function ProgramEditor() {
 
       {/* Empty state */}
       {items.length === 0 && !adding && (
-        <div className="px-6 py-12 text-center text-stone-400 text-sm">
-          No program blocks yet — add the first one.
+        <div className="px-6 py-12 text-center text-stone-600 text-sm">
+          No program blocks yet â€” add the first one.
         </div>
       )}
 
@@ -200,7 +200,7 @@ export default function ProgramEditor() {
                   ) : (
                     <span onClick={() => startEdit(item, 'time')}
                       className={`block text-sm font-mono cursor-text rounded px-1 py-0.5 hover:bg-stone-100 min-h-[22px] leading-tight ${item.time ? 'text-stone-700 font-medium' : 'text-stone-300'}`}
-                    >{item.time ?? '––:––'}</span>
+                    >{item.time ?? 'â€“â€“:â€“â€“'}</span>
                   )}
                   {/* End time */}
                   {editing?.id === item.id && editing.field === 'time_end' ? (
@@ -212,8 +212,8 @@ export default function ProgramEditor() {
                     />
                   ) : (
                     <span onClick={() => startEdit(item, 'time_end')}
-                      className={`block text-xs font-mono cursor-text rounded px-1 py-0.5 hover:bg-stone-100 min-h-[18px] leading-tight ${item.time_end ? 'text-stone-400' : 'text-stone-200 opacity-0 group-hover:opacity-100'}`}
-                    >{item.time_end ? `↳ ${item.time_end}` : '↳ end'}</span>
+                      className={`block text-xs font-mono cursor-text rounded px-1 py-0.5 hover:bg-stone-100 min-h-[18px] leading-tight ${item.time_end ? 'text-stone-600' : 'text-stone-200 opacity-0 group-hover:opacity-100'}`}
+                    >{item.time_end ? `â†³ ${item.time_end}` : 'â†³ end'}</span>
                   )}
                 </div>
 
@@ -234,24 +234,24 @@ export default function ProgramEditor() {
                     <textarea autoFocus value={editValue} onChange={e => setEditValue(e.target.value)}
                       onBlur={commitEdit}
                       onKeyDown={e => { if (e.key === 'Escape') setEditing(null); }}
-                      rows={2} placeholder="Add notes…"
+                      rows={2} placeholder="Add notesâ€¦"
                       className="mt-1 w-full border border-emerald-300 rounded-lg px-2 py-1 text-sm text-stone-600 bg-white focus:outline-none focus:ring-1 focus:ring-emerald-300 resize-none"
                     />
                   ) : (
                     <span onClick={() => startEdit(item, 'description')}
-                      className={`block mt-0.5 text-sm cursor-text rounded px-1 py-0.5 hover:bg-stone-100 min-h-[20px] ${item.description ? 'text-stone-500' : 'text-stone-300 opacity-0 group-hover:opacity-100 italic text-xs'}`}
-                    >{item.description ?? 'Add notes…'}</span>
+                      className={`block mt-0.5 text-sm cursor-text rounded px-1 py-0.5 hover:bg-stone-100 min-h-[20px] ${item.description ? 'text-stone-700' : 'text-stone-300 opacity-0 group-hover:opacity-100 italic text-xs'}`}
+                    >{item.description ?? 'Add notesâ€¦'}</span>
                   )}
                 </div>
 
                 {/* Actions */}
                 <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition flex-shrink-0 pt-0.5">
                   <button onClick={() => move(index, -1)} disabled={index === 0}
-                    className="p-1.5 rounded-lg text-stone-400 hover:text-stone-700 hover:bg-stone-100 disabled:opacity-20 disabled:cursor-not-allowed transition" title="Move up">
+                    className="p-1.5 rounded-lg text-stone-600 hover:text-stone-700 hover:bg-stone-100 disabled:opacity-20 disabled:cursor-not-allowed transition" title="Move up">
                     <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" /></svg>
                   </button>
                   <button onClick={() => move(index, 1)} disabled={index === items.length - 1}
-                    className="p-1.5 rounded-lg text-stone-400 hover:text-stone-700 hover:bg-stone-100 disabled:opacity-20 disabled:cursor-not-allowed transition" title="Move down">
+                    className="p-1.5 rounded-lg text-stone-600 hover:text-stone-700 hover:bg-stone-100 disabled:opacity-20 disabled:cursor-not-allowed transition" title="Move down">
                     <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
                   </button>
                   <button onClick={() => deleteItem(item.id, item.title)}
@@ -273,19 +273,19 @@ export default function ProgramEditor() {
         <form onSubmit={addItem} className="flex items-center gap-2 px-6 py-4 border-t border-stone-100 bg-stone-50 flex-wrap">
           <input value={newTime} onChange={e => setNewTime(e.target.value)}
             placeholder="Start (14:00)"
-            className="w-28 border border-stone-200 rounded-xl px-3 py-1.5 text-sm font-mono text-stone-900 bg-white placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-emerald-300"
+            className="w-28 border border-stone-200 rounded-xl px-3 py-1.5 text-sm font-mono text-stone-900 bg-white placeholder:text-stone-600 focus:outline-none focus:ring-2 focus:ring-emerald-300"
           />
           <input value={newTimeEnd} onChange={e => setNewTimeEnd(e.target.value)}
             placeholder="End (15:30)"
-            className="w-28 border border-stone-200 rounded-xl px-3 py-1.5 text-sm font-mono text-stone-900 bg-white placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-emerald-300"
+            className="w-28 border border-stone-200 rounded-xl px-3 py-1.5 text-sm font-mono text-stone-900 bg-white placeholder:text-stone-600 focus:outline-none focus:ring-2 focus:ring-emerald-300"
           />
           <input autoFocus value={newTitle} onChange={e => setNewTitle(e.target.value)}
-            placeholder="Block title…"
-            className="flex-1 min-w-[160px] border border-stone-200 rounded-xl px-3 py-1.5 text-sm text-stone-900 bg-white placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-emerald-300"
+            placeholder="Block titleâ€¦"
+            className="flex-1 min-w-[160px] border border-stone-200 rounded-xl px-3 py-1.5 text-sm text-stone-900 bg-white placeholder:text-stone-600 focus:outline-none focus:ring-2 focus:ring-emerald-300"
           />
           <button type="submit" className="bg-emerald-500 hover:bg-emerald-700 text-white text-sm px-4 py-1.5 rounded-xl transition font-medium">Add</button>
           <button type="button" onClick={() => { setAdding(false); setNewTitle(''); setNewTime(''); setNewTimeEnd(''); }}
-            className="text-sm text-stone-400 hover:text-stone-600 px-2 transition">Cancel</button>
+            className="text-sm text-stone-600 hover:text-stone-600 px-2 transition">Cancel</button>
         </form>
       )}
     </div>
@@ -298,7 +298,7 @@ function SolsticeLine() {
       <div className="w-20 flex-shrink-0 text-xs font-mono font-semibold text-amber-600">{SOLSTICE_LABEL}</div>
       <div className="flex items-center gap-2 flex-1">
         <div className="h-px flex-1 bg-amber-200" />
-        <span className="text-xs font-medium text-amber-600 whitespace-nowrap">☀ Winter Solstice</span>
+        <span className="text-xs font-medium text-amber-600 whitespace-nowrap">â˜€ Winter Solstice</span>
         <div className="h-px flex-1 bg-amber-200" />
       </div>
     </div>

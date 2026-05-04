@@ -32,11 +32,11 @@ export default function Navbar({ user }: NavbarProps) {
           <Link href="/planning/program" className="text-stone-700 hover:text-emerald-500 font-medium transition">
             Program
           </Link>
-          <Link href="/guests" className="text-stone-400 hover:text-emerald-500 transition">
+          <Link href="/guests" className="text-stone-600 hover:text-emerald-500 transition">
             Guest Page
           </Link>
           {(user as any)?.role === 'admin' && (
-            <Link href="/admin/users" className="text-stone-400 hover:text-emerald-500 transition">
+            <Link href="/admin/users" className="text-stone-600 hover:text-emerald-500 transition">
               Users
             </Link>
           )}
@@ -59,7 +59,7 @@ export default function Navbar({ user }: NavbarProps) {
             </div>
           )}
           <span className="hidden sm:block">{user?.name ?? user?.email}</span>
-          <svg className="w-4 h-4 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-4 h-4 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>
         </button>

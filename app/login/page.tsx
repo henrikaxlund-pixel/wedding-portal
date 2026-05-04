@@ -34,13 +34,13 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen bg-stone-50 flex items-center justify-center px-4">
+    <main className="min-h-screen bg-white flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
         {/* Header */}
         <div className="text-center mb-8">
           <div className="text-4xl mb-3">💍</div>
           <h1 className="text-2xl font-semibold text-stone-800">Riina & Henrik</h1>
-          <p className="text-stone-500 text-sm mt-1">21 December 2026 · Helsinki</p>
+          <p className="text-stone-700 text-sm mt-1">21 December 2026 · Helsinki</p>
         </div>
 
         <div className="bg-white rounded-2xl shadow-sm border border-stone-200 p-8 space-y-6">
@@ -61,7 +61,7 @@ export default function LoginPage() {
             Continue with Google
           </button>
 
-          <div className="flex items-center gap-3 text-stone-400 text-sm">
+          <div className="flex items-center gap-3 text-stone-600 text-sm">
             <div className="flex-1 h-px bg-stone-200" />
             or
             <div className="flex-1 h-px bg-stone-200" />
@@ -76,7 +76,7 @@ export default function LoginPage() {
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 required
-                className="w-full border border-stone-300 rounded-xl px-3 py-2.5 text-sm text-stone-900 bg-white placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-emerald-300"
+                className="w-full border border-stone-300 rounded-xl px-3 py-2.5 text-sm text-stone-900 bg-white placeholder:text-stone-600 focus:outline-none focus:ring-2 focus:ring-emerald-300"
                 placeholder="you@example.com"
               />
             </div>
@@ -87,7 +87,7 @@ export default function LoginPage() {
                 value={password}
                 onChange={e => setPassword(e.target.value)}
                 required
-                className="w-full border border-stone-300 rounded-xl px-3 py-2.5 text-sm text-stone-900 bg-white placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-emerald-300"
+                className="w-full border border-stone-300 rounded-xl px-3 py-2.5 text-sm text-stone-900 bg-white placeholder:text-stone-600 focus:outline-none focus:ring-2 focus:ring-emerald-300"
                 placeholder="••••••••"
               />
             </div>

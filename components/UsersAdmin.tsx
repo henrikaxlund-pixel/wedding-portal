@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 
@@ -87,11 +87,11 @@ export default function UsersAdmin() {
               disabled={adding}
               className="bg-emerald-500 hover:bg-emerald-600 text-white text-sm px-4 py-2 rounded-xl font-medium transition disabled:opacity-50 shrink-0"
             >
-              {adding ? 'Adding…' : 'Add'}
+              {adding ? 'Addingâ€¦' : 'Add'}
             </button>
           </div>
           {error && <p className="text-sm text-red-500">{error}</p>}
-          <p className="text-xs text-stone-400">
+          <p className="text-xs text-stone-600">
             They can sign in with Google once added. Status shows "Signed in" after their first login.
           </p>
         </form>
@@ -102,9 +102,9 @@ export default function UsersAdmin() {
         <table className="w-full text-sm">
           <thead className="border-b border-stone-100 bg-stone-50">
             <tr>
-              <th className="text-left px-5 py-3 text-xs font-medium text-stone-500 uppercase tracking-wide">Person</th>
-              <th className="text-left px-5 py-3 text-xs font-medium text-stone-500 uppercase tracking-wide">Role</th>
-              <th className="text-left px-5 py-3 text-xs font-medium text-stone-500 uppercase tracking-wide">Status</th>
+              <th className="text-left px-5 py-3 text-xs font-medium text-stone-700 uppercase tracking-wide">Person</th>
+              <th className="text-left px-5 py-3 text-xs font-medium text-stone-700 uppercase tracking-wide">Role</th>
+              <th className="text-left px-5 py-3 text-xs font-medium text-stone-700 uppercase tracking-wide">Status</th>
               <th className="px-5 py-3" />
             </tr>
           </thead>
@@ -123,22 +123,22 @@ export default function UsersAdmin() {
                     }
                     <div>
                       <div className="font-medium text-stone-800">
-                        {u.name ?? <span className="text-stone-400 italic">No name yet</span>}
+                        {u.name ?? <span className="text-stone-600 italic">No name yet</span>}
                       </div>
-                      <div className="text-stone-400 text-xs">{u.email}</div>
+                      <div className="text-stone-600 text-xs">{u.email}</div>
                     </div>
                   </div>
                 </td>
                 <td className="px-5 py-3">
                   <span className={`text-xs px-2 py-1 rounded-full font-medium ${
-                    u.role === 'admin' ? 'bg-amber-100 text-amber-700' : 'bg-stone-100 text-stone-500'
+                    u.role === 'admin' ? 'bg-amber-100 text-amber-700' : 'bg-stone-100 text-stone-700'
                   }`}>
                     {u.role}
                   </span>
                 </td>
                 <td className="px-5 py-3">
                   <span className={`text-xs px-2 py-1 rounded-full font-medium ${
-                    u.image ? 'bg-emerald-100 text-emerald-700' : 'bg-stone-100 text-stone-400'
+                    u.image ? 'bg-emerald-100 text-emerald-700' : 'bg-stone-100 text-stone-600'
                   }`}>
                     {u.image ? 'Signed in' : 'Pending'}
                   </span>
@@ -158,7 +158,7 @@ export default function UsersAdmin() {
             ))}
             {users.length === 0 && (
               <tr>
-                <td colSpan={4} className="px-5 py-8 text-center text-stone-400 text-sm">No users yet.</td>
+                <td colSpan={4} className="px-5 py-8 text-center text-stone-600 text-sm">No users yet.</td>
               </tr>
             )}
           </tbody>

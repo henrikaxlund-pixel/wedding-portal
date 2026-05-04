@@ -119,7 +119,7 @@ export default function GuestList() {
     setNewAvecName('');
   }
 
-  if (loading) return <div className="text-stone-400">Loading…</div>;
+  if (loading) return <div className="text-stone-600">Loading…</div>;
 
   return (
     <div className="space-y-8">
@@ -138,17 +138,17 @@ export default function GuestList() {
         <div className="bg-white border border-stone-200 rounded-2xl px-5 py-3 flex flex-col justify-center gap-3 min-w-[160px]">
           <div>
             <p className="text-xl font-semibold text-stone-800">{guests.length}</p>
-            <p className="text-xs text-stone-400">Listed</p>
+            <p className="text-xs text-stone-600">Listed</p>
           </div>
           <div className="border-t border-stone-100" />
           <div>
             <p className="text-xl font-semibold text-stone-800">{totalInvited}</p>
-            <p className="text-xs text-stone-400">Invited</p>
+            <p className="text-xs text-stone-600">Invited</p>
           </div>
           <div className="border-t border-stone-100" />
           <div>
             <p className="text-xl font-semibold text-stone-800">{totalResponded}</p>
-            <p className="text-xs text-stone-400">Responded</p>
+            <p className="text-xs text-stone-600">Responded</p>
           </div>
         </div>
       </div>
@@ -162,7 +162,7 @@ export default function GuestList() {
               value={newGuest.name}
               onChange={e => setNewGuest(f => ({ ...f, name: e.target.value }))}
               placeholder="Guest name"
-              className="border border-stone-200 rounded-xl px-3 py-1.5 text-sm text-stone-900 bg-white placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-emerald-300 w-48"
+              className="border border-stone-200 rounded-xl px-3 py-1.5 text-sm text-stone-900 bg-white placeholder:text-stone-600 focus:outline-none focus:ring-2 focus:ring-emerald-300 w-48"
             />
             <select
               value={newGuest.side}
@@ -173,7 +173,7 @@ export default function GuestList() {
               <option value="henrik">Henrik's side</option>
             </select>
             <button type="submit" className="bg-emerald-500 hover:bg-emerald-800 text-white text-sm px-3 py-1.5 rounded-xl transition">Add</button>
-            <button type="button" onClick={() => setShowAddForm(false)} className="text-sm text-stone-400 hover:text-stone-600 px-2">Cancel</button>
+            <button type="button" onClick={() => setShowAddForm(false)} className="text-sm text-stone-600 hover:text-stone-600 px-2">Cancel</button>
           </form>
         ) : (
           <button
@@ -198,13 +198,13 @@ export default function GuestList() {
         <div key={section.side}>
           <h2 className="font-semibold text-stone-700 mb-2 flex items-center gap-2">
             {section.label}
-            <span className="bg-stone-200 text-stone-500 text-xs px-1.5 py-0.5 rounded-full">{section.list.length}</span>
+            <span className="bg-stone-200 text-stone-700 text-xs px-1.5 py-0.5 rounded-full">{section.list.length}</span>
           </h2>
           <div className="bg-white border border-stone-200 rounded-2xl overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-stone-100 text-xs text-stone-400 uppercase tracking-wide">
+                  <tr className="border-b border-stone-100 text-xs text-stone-600 uppercase tracking-wide">
                     <th className="text-left px-4 py-2.5 font-medium">Name</th>
                     <th className="text-center px-2 py-2.5 font-medium w-14">STD</th>
                     <th className="text-center px-2 py-2.5 font-medium w-14">Invited</th>
@@ -218,7 +218,7 @@ export default function GuestList() {
                 </thead>
                 <tbody className="divide-y divide-stone-50">
                   {section.list.length === 0 && (
-                    <tr><td colSpan={10} className="px-4 py-6 text-stone-400 text-sm">No guests yet.</td></tr>
+                    <tr><td colSpan={10} className="px-4 py-6 text-stone-600 text-sm">No guests yet.</td></tr>
                   )}
                   {section.list.map(guest => (
                     <tr key={guest.id} className="hover:bg-stone-50 group">
@@ -261,7 +261,7 @@ export default function GuestList() {
                                 <button
                                   type="button"
                                   onClick={() => { setAddingAvecFor(null); setNewAvecName(''); }}
-                                  className="text-xs text-stone-300 hover:text-stone-500 transition"
+                                  className="text-xs text-stone-300 hover:text-stone-700 transition"
                                 >✕</button>
                               </form>
                             ) : (
@@ -300,7 +300,7 @@ export default function GuestList() {
                             className={`px-2 py-0.5 rounded-l-lg border text-xs font-medium transition ${
                               guest.answered === 'accepted'
                                 ? 'bg-emerald-500 border-emerald-500 text-white'
-                                : 'bg-white border-stone-200 text-stone-400 hover:border-emerald-300 hover:text-emerald-600'
+                                : 'bg-white border-stone-200 text-stone-600 hover:border-emerald-300 hover:text-emerald-600'
                             }`}
                           >✓</button>
                           <button
@@ -308,8 +308,8 @@ export default function GuestList() {
                             title="No response"
                             className={`px-2 py-0.5 border-t border-b text-xs font-medium transition ${
                               guest.answered === null
-                                ? 'bg-stone-100 border-stone-300 text-stone-500'
-                                : 'bg-white border-stone-200 text-stone-300 hover:border-stone-300 hover:text-stone-500'
+                                ? 'bg-stone-100 border-stone-300 text-stone-700'
+                                : 'bg-white border-stone-200 text-stone-300 hover:border-stone-300 hover:text-stone-700'
                             }`}
                           >—</button>
                           <button
@@ -318,7 +318,7 @@ export default function GuestList() {
                             className={`px-2 py-0.5 rounded-r-lg border text-xs font-medium transition ${
                               guest.answered === 'declined'
                                 ? 'bg-red-400 border-red-400 text-white'
-                                : 'bg-white border-stone-200 text-stone-400 hover:border-red-300 hover:text-red-400'
+                                : 'bg-white border-stone-200 text-stone-600 hover:border-red-300 hover:text-red-400'
                             }`}
                           >✗</button>
                         </div>

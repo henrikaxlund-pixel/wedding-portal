@@ -108,26 +108,26 @@ export default function TaskModal({ task, users, onClose, onUpdate, onDelete }: 
             <input
               value={title}
               onChange={e => setTitle(e.target.value)}
-              className="w-full text-lg font-semibold text-stone-900 bg-white border-b border-stone-200 pb-1 focus:outline-none focus:border-emerald-500 placeholder:text-stone-400"
+              className="w-full text-lg font-semibold text-stone-900 bg-white border-b border-stone-200 pb-1 focus:outline-none focus:border-emerald-500 placeholder:text-stone-600"
               placeholder="Task title"
             />
           </div>
 
           {/* Description */}
           <div>
-            <label className="block text-xs font-medium text-stone-500 uppercase tracking-wide mb-1">Description</label>
+            <label className="block text-xs font-medium text-stone-700 uppercase tracking-wide mb-1">Description</label>
             <textarea
               value={description}
               onChange={e => setDescription(e.target.value)}
               rows={3}
-              className="w-full border border-stone-200 rounded-xl px-3 py-2 text-sm text-stone-900 bg-white placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-emerald-300 resize-none"
+              className="w-full border border-stone-200 rounded-xl px-3 py-2 text-sm text-stone-900 bg-white placeholder:text-stone-600 focus:outline-none focus:ring-2 focus:ring-emerald-300 resize-none"
               placeholder="Add notes, links, details…"
             />
           </div>
 
           {/* Status */}
           <div>
-            <label className="block text-xs font-medium text-stone-500 uppercase tracking-wide mb-2">Status</label>
+            <label className="block text-xs font-medium text-stone-700 uppercase tracking-wide mb-2">Status</label>
             <div className="flex gap-2">
               {STATUSES.map(s => (
                 <button
@@ -136,7 +136,7 @@ export default function TaskModal({ task, users, onClose, onUpdate, onDelete }: 
                   className={`text-xs px-3 py-1.5 rounded-full font-medium transition ${
                     status === s.value
                       ? s.color + ' ring-2 ring-offset-1 ring-emerald-300'
-                      : 'bg-stone-100 text-stone-400 hover:bg-stone-200'
+                      : 'bg-stone-100 text-stone-600 hover:bg-stone-200'
                   }`}
                 >
                   {s.label}
@@ -147,7 +147,7 @@ export default function TaskModal({ task, users, onClose, onUpdate, onDelete }: 
 
           {/* Assignees */}
           <div>
-            <label className="block text-xs font-medium text-stone-500 uppercase tracking-wide mb-2">Assigned to</label>
+            <label className="block text-xs font-medium text-stone-700 uppercase tracking-wide mb-2">Assigned to</label>
             <div className="space-y-1">
               {users.map(u => {
                 const checked = assigneeIds.includes(u.id);
@@ -187,13 +187,13 @@ export default function TaskModal({ task, users, onClose, onUpdate, onDelete }: 
                   </label>
                 );
               })}
-              {users.length === 0 && <p className="text-xs text-stone-400 px-3">No users yet.</p>}
+              {users.length === 0 && <p className="text-xs text-stone-600 px-3">No users yet.</p>}
             </div>
           </div>
 
           {/* Attachments */}
           <div>
-            <label className="block text-xs font-medium text-stone-500 uppercase tracking-wide mb-2">Attachments</label>
+            <label className="block text-xs font-medium text-stone-700 uppercase tracking-wide mb-2">Attachments</label>
             {attachments.length > 0 && (
               <ul className="space-y-1.5 mb-2">
                 {attachments.map(att => (
@@ -207,7 +207,7 @@ export default function TaskModal({ task, users, onClose, onUpdate, onDelete }: 
                     >
                       {att.original}
                     </a>
-                    <span className="text-xs text-stone-400 shrink-0">{formatSize(att.size)}</span>
+                    <span className="text-xs text-stone-600 shrink-0">{formatSize(att.size)}</span>
                     <button
                       onClick={() => removeAttachment(att.id, att.filename)}
                       className="text-stone-300 hover:text-red-400 transition shrink-0"
@@ -220,7 +220,7 @@ export default function TaskModal({ task, users, onClose, onUpdate, onDelete }: 
                 ))}
               </ul>
             )}
-            <label className="inline-flex items-center gap-1.5 text-sm text-stone-500 hover:text-stone-700 cursor-pointer border border-dashed border-stone-300 rounded-xl px-3 py-2 hover:border-stone-400 transition">
+            <label className="inline-flex items-center gap-1.5 text-sm text-stone-700 hover:text-stone-700 cursor-pointer border border-dashed border-stone-300 rounded-xl px-3 py-2 hover:border-stone-400 transition">
               {uploading ? (
                 <>
                   <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
@@ -253,7 +253,7 @@ export default function TaskModal({ task, users, onClose, onUpdate, onDelete }: 
           <div className="flex gap-2">
             <button
               onClick={onClose}
-              className="text-sm px-4 py-2 rounded-xl text-stone-500 hover:bg-stone-100 transition"
+              className="text-sm px-4 py-2 rounded-xl text-stone-700 hover:bg-stone-100 transition"
             >
               Cancel
             </button>

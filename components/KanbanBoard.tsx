@@ -121,7 +121,7 @@ export default function KanbanBoard() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64 text-stone-400">
+      <div className="flex items-center justify-center h-64 text-stone-600">
         Loading…
       </div>
     );
@@ -145,7 +145,7 @@ export default function KanbanBoard() {
             </div>
             <div className="space-y-2 min-h-[2rem]">
               {myTasks().length === 0 && (
-                <p className="text-xs text-stone-400 px-1">No tasks assigned to you yet.</p>
+                <p className="text-xs text-stone-600 px-1">No tasks assigned to you yet.</p>
               )}
               {myTasks().map(task => {
                 const col = COLUMNS.find(c => c.id === task.column);
@@ -165,7 +165,7 @@ export default function KanbanBoard() {
                       }}
                     />
                     {col && (
-                      <span className="absolute top-2 right-2 text-xs text-stone-400 bg-stone-100 px-1.5 py-0.5 rounded-full pointer-events-none">
+                      <span className="absolute top-2 right-2 text-xs text-stone-600 bg-stone-100 px-1.5 py-0.5 rounded-full pointer-events-none">
                         {col.emoji}
                       </span>
                     )}
@@ -188,7 +188,7 @@ export default function KanbanBoard() {
               <h2 className="font-semibold text-stone-700 text-sm flex items-center gap-1.5">
                 <span>{col.emoji}</span>
                 {col.label}
-                <span className="ml-1 bg-stone-200 text-stone-500 text-xs px-1.5 py-0.5 rounded-full">
+                <span className="ml-1 bg-stone-200 text-stone-700 text-xs px-1.5 py-0.5 rounded-full">
                   {tasksForColumn(col.id).length}
                 </span>
               </h2>
@@ -223,7 +223,7 @@ export default function KanbanBoard() {
             ) : (
               <button
                 onClick={() => setNewTaskColumn(col.id)}
-                className="mt-2 w-full text-left text-sm text-stone-400 hover:text-stone-600 hover:bg-stone-100 rounded-xl px-3 py-2 transition flex items-center gap-1"
+                className="mt-2 w-full text-left text-sm text-stone-600 hover:text-stone-600 hover:bg-stone-100 rounded-xl px-3 py-2 transition flex items-center gap-1"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -264,7 +264,7 @@ function NewTaskInput({ onAdd, onCancel }: { onAdd: (title: string) => void; onC
         onChange={e => setTitle(e.target.value)}
         onKeyDown={handleKey}
         placeholder="Task title…"
-        className="w-full border border-stone-300 rounded-xl px-3 py-2 text-sm text-stone-900 bg-white placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-emerald-300"
+        className="w-full border border-stone-300 rounded-xl px-3 py-2 text-sm text-stone-900 bg-white placeholder:text-stone-600 focus:outline-none focus:ring-2 focus:ring-emerald-300"
       />
       <div className="flex gap-2 mt-1.5">
         <button
@@ -275,7 +275,7 @@ function NewTaskInput({ onAdd, onCancel }: { onAdd: (title: string) => void; onC
         </button>
         <button
           onClick={onCancel}
-          className="text-xs text-stone-500 px-3 py-1.5 rounded-lg hover:bg-stone-100 transition"
+          className="text-xs text-stone-700 px-3 py-1.5 rounded-lg hover:bg-stone-100 transition"
         >
           Cancel
         </button>
