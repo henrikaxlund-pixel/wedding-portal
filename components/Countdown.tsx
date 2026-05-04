@@ -46,13 +46,13 @@ export default function Countdown({ textColor = '#f5f0e8' }: Props) {
         <div key={u.label} className="flex flex-col items-center">
           <span
             className="text-3xl sm:text-4xl font-bold tabular-nums leading-none"
-            style={{ color: textColor }}
+            style={{ color: textColor, fontFamily: 'var(--font-cinzel)' }}
           >
             {String(u.value).padStart(2, '0')}
           </span>
           <span
             className="text-xs uppercase tracking-widest mt-2 opacity-60"
-            style={{ color: textColor }}
+            style={{ color: textColor, fontFamily: 'var(--font-cinzel)' }}
           >
             {u.label}
           </span>

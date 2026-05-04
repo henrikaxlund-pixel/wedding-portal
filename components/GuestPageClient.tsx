@@ -191,35 +191,42 @@ export default function GuestPageClient({ initialContent, isEditor }: Props) {
             editing={editing}
             onChange={v => update('hero_title', v)}
             textColor={textColor}
-            className="text-5xl sm:text-7xl font-bold tracking-tight"
+            className="text-3xl sm:text-5xl font-bold tracking-widest uppercase"
+            fontFamily="var(--font-cinzel)"
           />
           <EditableText
             value={content.hero_subtitle}
             editing={editing}
             onChange={v => update('hero_subtitle', v)}
             textColor={textColor}
-            className="text-lg sm:text-xl opacity-70"
+            className="text-sm sm:text-base opacity-70 tracking-[0.25em] uppercase"
+            fontFamily="var(--font-cinzel)"
           />
           <EditableText
             value={content.hero_body}
             editing={editing}
             onChange={v => update('hero_body', v)}
             textColor={textColor}
-            className="text-base opacity-60 max-w-lg"
+            className="text-base opacity-60 max-w-lg tracking-wide"
+            fontFamily="var(--font-cinzel)"
             multiline
           />
         </section>
 
+        {/* Divider */}
+        <div className="w-64 h-px opacity-30" style={{ backgroundColor: textColor }} />
+
         {/* RSVP button */}
-        <section className="w-full flex flex-col items-center px-6 pb-12">
+        <section className="w-full flex flex-col items-center px-6 py-12">
           <a
             href="/rsvp"
-            className="border-2 border-white/30 hover:border-white/60 rounded-2xl px-16 py-6 text-center transition hover:bg-white/5"
+            className="border border-white/40 hover:border-white/70 px-20 py-6 text-center transition hover:bg-white/5"
+            style={{ fontFamily: 'var(--font-cinzel)' }}
           >
-            <span className="block text-xs uppercase tracking-[0.3em] opacity-50 mb-1" style={{ color: textColor }}>
-              Please reply by
-            </span>
-            <span className="block text-2xl font-semibold" style={{ color: textColor }}>
+            <span
+              className="block text-xl tracking-[0.4em] uppercase"
+              style={{ color: textColor }}
+            >
               RSVP
             </span>
           </a>
@@ -236,7 +243,7 @@ export default function GuestPageClient({ initialContent, isEditor }: Props) {
             {editing && (
               <button
                 onClick={() => deleteModule(mod.id)}
-                className="absolute top-4 right-4 text-white/30 hover:text-red-400 transition bg-black/30 rounded-full p-1.5"
+                className="absolute top-4 right-4 text-white/30 hover:text-red-400 transition bg-black/30 p-1.5"
                 title="Delete section"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -250,16 +257,18 @@ export default function GuestPageClient({ initialContent, isEditor }: Props) {
               editing={editing}
               onChange={v => updateModule(mod.id, 'title', v)}
               textColor={textColor}
-              className="text-2xl font-semibold"
+              className="text-xl tracking-widest uppercase"
+              fontFamily="var(--font-cinzel)"
             />
             <EditableText
               value={mod.body}
               editing={editing}
               onChange={v => updateModule(mod.id, 'body', v)}
               textColor={textColor}
-              className="opacity-70 whitespace-pre-wrap leading-relaxed"
+              className="opacity-70 whitespace-pre-wrap leading-relaxed text-base italic"
+              fontFamily="var(--font-baskerville)"
               multiline
-              placeholder="Add content hereâ€¦"
+              placeholder="Add content here…"
             />
           </section>
         ))}
@@ -268,7 +277,8 @@ export default function GuestPageClient({ initialContent, isEditor }: Props) {
         {editing && modules.length === 0 && (
           <button
             onClick={addModule}
-            className="mt-4 text-white/40 hover:text-white/70 border border-white/20 hover:border-white/40 rounded-2xl px-8 py-4 text-sm transition"
+            className="mt-4 text-white/40 hover:text-white/70 border border-white/20 hover:border-white/40 px-8 py-4 text-sm transition"
+            style={{ fontFamily: 'var(--font-cinzel)' }}
           >
             + Add a section (venue, program, etc.)
           </button>
@@ -280,19 +290,21 @@ export default function GuestPageClient({ initialContent, isEditor }: Props) {
   );
 }
 
-function EditableText({ value, editing, onChange, textColor, className, multiline = false, placeholder = '' }: {
+function EditableText({ value, editing, onChange, textColor, className, fontFamily, multiline = false, placeholder = '' }: {
   value: string;
   editing: boolean;
   onChange: (v: string) => void;
   textColor: string;
   className: string;
+  fontFamily?: string;
   multiline?: boolean;
   placeholder?: string;
 }) {
   const base = "bg-transparent border-b-2 border-white/20 focus:border-white/60 focus:outline-none w-full text-center";
+  const style = { color: textColor, ...(fontFamily ? { fontFamily } : {}) };
 
   if (!editing) {
-    return value ? <p className={className} style={{ color: textColor }}>{value}</p> : null;
+    return value ? <p className={className} style={style}>{value}</p> : null;
   }
 
   return multiline ? (
@@ -302,7 +314,7 @@ function EditableText({ value, editing, onChange, textColor, className, multilin
       rows={3}
       placeholder={placeholder}
       className={`${className} ${base} resize-none placeholder:text-white/20`}
-      style={{ color: textColor }}
+      style={style}
     />
   ) : (
     <input
@@ -311,7 +323,7 @@ function EditableText({ value, editing, onChange, textColor, className, multilin
       onChange={e => onChange(e.target.value)}
       placeholder={placeholder}
       className={`${className} ${base} placeholder:text-white/20`}
-      style={{ color: textColor }}
+      style={style}
     />
   );
 }
