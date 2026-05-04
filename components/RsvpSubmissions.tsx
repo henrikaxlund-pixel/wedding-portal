@@ -144,7 +144,7 @@ export default function RsvpSubmissions({ guests }: { guests: Guest[] }) {
 
           {/* Matched submissions */}
           {matched.length > 0 && (
-            <details className="group">
+            <details className="group" open>
               <summary className="cursor-pointer text-xs text-stone-600 font-medium px-1 py-1 hover:text-stone-800 list-none flex items-center gap-1">
                 <svg className="w-3 h-3 transition-transform group-open:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -153,27 +153,29 @@ export default function RsvpSubmissions({ guests }: { guests: Guest[] }) {
               </summary>
               <div className="mt-2 bg-white border border-stone-200 rounded-2xl divide-y divide-stone-100 overflow-hidden">
                 {matched.map(s => (
-                  <div key={s.id} className="px-5 py-3 flex items-center gap-3 flex-wrap">
-                    <ResponseBadge response={s.response} />
-                    <span className="text-sm text-stone-800">{s.submitted_name}</span>
-                    <span className="text-stone-300 text-xs">→</span>
-                    <span className="text-sm text-stone-600">{s.guest_name}</span>
-                    <span className="text-xs px-1.5 py-0.5 rounded-full bg-stone-100 text-stone-600">
-                      {s.match_type}
-                    </span>
+                  <div key={s.id} className="px-5 py-4">
+                    <div className="flex items-center gap-3 flex-wrap">
+                      <ResponseBadge response={s.response} />
+                      <span className="text-sm font-medium text-stone-800">{s.submitted_name}</span>
+                      <span className="text-stone-300 text-xs">→</span>
+                      <span className="text-sm text-stone-600">{s.guest_name}</span>
+                      <span className="text-xs px-1.5 py-0.5 rounded-full bg-stone-100 text-stone-600">
+                        {s.match_type}
+                      </span>
+                      <span className="text-xs text-stone-400 ml-auto">{formatDate(s.submitted_at)}</span>
+                      <button
+                        onClick={() => deleteSubmission(s.id)}
+                        className="text-stone-300 hover:text-red-400 transition"
+                        title="Delete"
+                      >
+                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </button>
+                    </div>
                     {s.message && (
-                      <span className="text-xs text-stone-600 italic ml-1">"{s.message}"</span>
+                      <p className="mt-2 text-sm text-stone-600 italic border-l-2 border-stone-200 pl-3">"{s.message}"</p>
                     )}
-                    <span className="text-xs text-stone-400 ml-auto">{formatDate(s.submitted_at)}</span>
-                    <button
-                      onClick={() => deleteSubmission(s.id)}
-                      className="text-stone-300 hover:text-red-400 transition"
-                      title="Delete"
-                    >
-                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </button>
                   </div>
                 ))}
               </div>
