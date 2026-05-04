@@ -185,7 +185,7 @@ export default function GuestPageClient({ initialContent, isEditor }: Props) {
       <div className={`flex-1 flex flex-col items-center ${isEditor ? 'pt-14' : ''}`}>
 
         {/* Hero */}
-        <section className="w-full flex flex-col items-center justify-center text-center px-6 py-24 gap-6">
+        <section className="w-full flex flex-col items-center justify-center text-center px-6 py-20 gap-6">
           <EditableText
             value={content.hero_title}
             editing={editing}
@@ -207,14 +207,13 @@ export default function GuestPageClient({ initialContent, isEditor }: Props) {
             editing={editing}
             onChange={v => update('hero_body', v)}
             textColor={textColor}
-            className="text-base opacity-60 max-w-lg tracking-wide"
+            className="text-sm opacity-60 max-w-lg tracking-wide"
             fontFamily="var(--font-cinzel)"
             multiline
           />
+          {/* Divider sits inside hero so gap-6 keeps spacing uniform */}
+          <div className="w-64 h-px opacity-30" style={{ backgroundColor: textColor }} />
         </section>
-
-        {/* Divider */}
-        <div className="w-64 h-px opacity-30" style={{ backgroundColor: textColor }} />
 
         {/* RSVP button */}
         <section className="w-full flex flex-col items-center px-6 py-12">
