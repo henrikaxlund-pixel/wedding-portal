@@ -1,6 +1,7 @@
 ﻿'use client';
 
 import { useEffect, useState } from 'react';
+import RsvpSubmissions from './RsvpSubmissions';
 
 export interface Guest {
   id: string;
@@ -141,6 +142,9 @@ export default function GuestList() {
 
   return (
     <div className="space-y-8">
+      {/* RSVP submissions — shown to logged-in users */}
+      <RsvpSubmissions guests={guests} />
+
       {/* Stats */}
       <div className="flex gap-3">
         {/* Confirmed guests — big card */}
