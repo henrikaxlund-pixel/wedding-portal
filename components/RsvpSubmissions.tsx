@@ -8,6 +8,7 @@ interface Submission {
   submitted_name: string;
   submitted_email: string | null;
   response: 'accepted' | 'declined';
+  avec_name: string | null;
   message: string | null;
   submitted_at: string;
   matched_guest_id: string | null;
@@ -101,6 +102,9 @@ export default function RsvpSubmissions({ guests }: { guests: Guest[] }) {
                       {s.submitted_email && (
                         <p className="text-xs text-stone-600 mt-0.5">{s.submitted_email}</p>
                       )}
+                      {s.avec_name && (
+                        <p className="text-xs text-stone-500 mt-0.5">+ {s.avec_name}</p>
+                      )}
                       {s.message && (
                         <p className="text-sm text-stone-700 mt-1 italic">"{s.message}"</p>
                       )}
@@ -173,6 +177,9 @@ export default function RsvpSubmissions({ guests }: { guests: Guest[] }) {
                         </svg>
                       </button>
                     </div>
+                    {s.avec_name && (
+                      <p className="mt-1 text-xs text-stone-500 pl-1">+ {s.avec_name}</p>
+                    )}
                     {s.message && (
                       <p className="mt-2 text-sm text-stone-600 italic border-l-2 border-stone-200 pl-3">"{s.message}"</p>
                     )}

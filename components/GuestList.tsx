@@ -83,11 +83,9 @@ export default function GuestList() {
 
   async function deleteGuest(guest: Guest) {
     if (!confirm(`Remove ${guest.name}?`)) return;
-    // Clear the avec link on the partner first
-    if (guest.avec) {
-      const partner = guests.find(g => g.name === guest.avec);
-      if (partner) await patchGuest(partner.id, { avec: null });
-    }
+    // Clear any guest whose avec points to this guest's name (catches broken links too)
+    const linked = guests.filter(g => g.id !== guest.id && g.avec === guest.name);
+    for (const l of linked) await patchGuest(l.id, { avec: null });
     await fetch(`/api/guests/${guest.id}`, { method: 'DELETE' });
     setGuests(prev => prev.filter(g => g.id !== guest.id));
   }
@@ -111,21 +109,18 @@ export default function GuestList() {
     const name = newAvecName.trim();
     if (!name) return;
 
-    // Create the new guest on the same side
+    // Create new guest with avec already set — no third PATCH needed
     const res = await fetch('/api/guests', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, side: mainGuest.side }),
+      body: JSON.stringify({ name, side: mainGuest.side, avec: mainGuest.name }),
     });
     const newGuest = await res.json();
 
-    // Add to local state immediately so the patch below can find them
-    setGuests(prev => [...prev, newGuest]);
-
-    // Link both ways
+    // Link mainGuest to the new guest (one PATCH only)
     await patchGuest(mainGuest.id, { avec: name });
-    await patchGuest(newGuest.id, { avec: mainGuest.name });
 
+    setGuests(prev => [...prev, newGuest]);
     setAddingAvecFor(null);
     setNewAvecName('');
   }
@@ -250,8 +245,8 @@ export default function GuestList() {
                           )}
                         </div>
 
-                        {/* Add avec — shown on hover for any guest without a linked avec */}
-                        {!guest.avec && (
+                        {/* Add avec — shown when no avec, or avec is set but partner not found (broken link) */}
+                        {(!guest.avec || !guests.some(g => g.name === guest.avec)) && (
                           <div className="ml-4 mt-0.5">
                             {addingAvecFor === guest.id ? (
                               <form

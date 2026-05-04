@@ -19,7 +19,7 @@ async function findMatchingGuest(submittedName: string) {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { name, email, response, message } = body;
+    const { name, email, response, message, avec_name } = body;
 
     if (!name || !response || !['accepted', 'declined'].includes(response)) {
       return NextResponse.json({ error: 'Invalid submission' }, { status: 400 });
@@ -29,10 +29,10 @@ export async function POST(req: NextRequest) {
 
     const [submission] = await sql`
       INSERT INTO rsvp_submissions
-        (submitted_name, submitted_email, response, message, matched_guest_id, match_type)
+        (submitted_name, submitted_email, response, message, avec_name, matched_guest_id, match_type)
       VALUES
         (${name}, ${email ?? null}, ${response}, ${message ?? null},
-         ${match?.id ?? null}, ${match ? 'auto' : null})
+         ${avec_name ?? null}, ${match?.id ?? null}, ${match ? 'auto' : null})
       RETURNING *
     `;
 
