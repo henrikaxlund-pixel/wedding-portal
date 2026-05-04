@@ -97,7 +97,7 @@ export default function GuestPageClient({ initialContent, isEditor }: Props) {
                   onClick={() => setBgPickerOpen(p => !p)}
                   className="flex items-center gap-1.5 bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-lg transition"
                 >
-                  ðŸŽ¨ Background
+                  🎨 Background
                 </button>
                 {bgPickerOpen && (
                   <div className="absolute top-full right-0 mt-2 bg-stone-900 border border-stone-700 rounded-2xl p-4 w-72 space-y-4 shadow-xl">
@@ -119,7 +119,7 @@ export default function GuestPageClient({ initialContent, isEditor }: Props) {
                     </div>
                     <p className="text-xs text-stone-600 uppercase tracking-wide">Or upload image</p>
                     <label className="flex items-center gap-2 cursor-pointer bg-stone-800 hover:bg-stone-700 border border-stone-600 rounded-xl px-3 py-2 text-sm transition">
-                      ðŸ“· Choose image
+                      📷 Choose image
                       <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={uploadBg} />
                     </label>
                     {content.background_type === 'image' && (
@@ -127,7 +127,7 @@ export default function GuestPageClient({ initialContent, isEditor }: Props) {
                         onClick={() => { update('background_type', 'color'); update('background_value', '#1a1a2e'); }}
                         className="text-xs text-stone-600 hover:text-white transition"
                       >
-                        âœ• Remove image
+                        ✕ Remove image
                       </button>
                     )}
                     <p className="text-xs text-stone-600 uppercase tracking-wide">Text color</p>
@@ -161,7 +161,7 @@ export default function GuestPageClient({ initialContent, isEditor }: Props) {
                 disabled={saving}
                 className="bg-emerald-600 hover:bg-emerald-700 px-4 py-1.5 rounded-lg font-medium transition disabled:opacity-50"
               >
-                {saving ? 'Savingâ€¦' : 'Save'}
+                {saving ? 'Saving…' : 'Save'}
               </button>
               <button
                 onClick={cancel}
@@ -175,7 +175,7 @@ export default function GuestPageClient({ initialContent, isEditor }: Props) {
               onClick={() => setEditing(true)}
               className="flex items-center gap-1.5 bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-lg transition"
             >
-              âœï¸ Edit page
+              ✏️ Edit page
             </button>
           )}
         </div>
@@ -239,7 +239,7 @@ export default function GuestPageClient({ initialContent, isEditor }: Props) {
 
         {/* Dynamic modules */}
         {modules.map(mod => (
-          <section key={mod.id} className="w-full max-w-2xl px-6 py-12 flex flex-col gap-4 relative group">
+          <section key={mod.id} className="w-full max-w-2xl px-6 py-12 flex flex-col items-center text-center gap-4 relative group">
             {editing && (
               <button
                 onClick={() => deleteModule(mod.id)}

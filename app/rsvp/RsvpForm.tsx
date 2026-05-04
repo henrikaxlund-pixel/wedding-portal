@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-export default function RsvpForm() {
+export default function RsvpForm({ textColor = '#f5f0e8' }: { textColor?: string }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [response, setResponse] = useState<'accepted' | 'declined' | null>(null);
@@ -31,30 +31,30 @@ export default function RsvpForm() {
     }
   }
 
-  const inputCls = "w-full border border-stone-300 px-4 py-3 text-stone-900 placeholder:text-stone-400 focus:outline-none focus:border-stone-500 bg-white";
+  const inputCls = "w-full bg-white/10 border border-white/20 px-4 py-3 placeholder:opacity-30 focus:outline-none focus:border-white/50";
 
   if (done) {
     return (
-      <main className="min-h-screen bg-white flex items-center justify-center px-4">
+      <main className="min-h-screen flex items-center justify-center px-4">
         <div className="w-full max-w-sm text-center space-y-5">
           <div className="text-5xl">{response === 'accepted' ? '🥂' : '💌'}</div>
           <h1
             className="text-2xl tracking-widest uppercase"
-            style={{ fontFamily: 'var(--font-cinzel)' }}
+            style={{ color: textColor, fontFamily: 'var(--font-cinzel)' }}
           >
             {response === 'accepted' ? 'See you there' : 'Until next time'}
           </h1>
           <p
-            className="text-stone-600 text-base italic leading-relaxed"
-            style={{ fontFamily: 'var(--font-baskerville)' }}
+            className="text-base italic leading-relaxed opacity-75"
+            style={{ color: textColor, fontFamily: 'var(--font-baskerville)' }}
           >
             {response === 'accepted'
               ? `We're so happy you can join us, ${name.split(' ')[0]}. We'll be in touch with more details closer to the day.`
               : `Thank you for letting us know, ${name.split(' ')[0]}. You'll be missed.`}
           </p>
           <p
-            className="text-stone-400 text-sm pt-4 tracking-widest uppercase"
-            style={{ fontFamily: 'var(--font-cinzel)' }}
+            className="text-sm pt-4 tracking-widest uppercase opacity-50"
+            style={{ color: textColor, fontFamily: 'var(--font-cinzel)' }}
           >
             Riina & Henrik · 21 Dec 2026
           </p>
@@ -64,39 +64,39 @@ export default function RsvpForm() {
   }
 
   return (
-    <main className="min-h-screen bg-white flex items-center justify-center px-4 py-12">
+    <main className="min-h-screen flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">
 
         {/* Header */}
         <div className="text-center mb-10">
           <h1
-            className="text-2xl tracking-[0.3em] uppercase text-stone-800"
-            style={{ fontFamily: 'var(--font-cinzel)' }}
+            className="text-2xl tracking-[0.3em] uppercase"
+            style={{ color: textColor, fontFamily: 'var(--font-cinzel)' }}
           >
             Riina & Henrik
           </h1>
           <p
-            className="text-stone-500 text-sm mt-2 tracking-widest uppercase"
-            style={{ fontFamily: 'var(--font-cinzel)' }}
+            className="text-sm mt-2 tracking-widest uppercase opacity-60"
+            style={{ color: textColor, fontFamily: 'var(--font-cinzel)' }}
           >
             21 December 2026 · Helsinki
           </p>
-          <div className="w-16 h-px bg-stone-300 mx-auto mt-5 mb-5" />
+          <div className="w-16 h-px mx-auto mt-5 mb-5 opacity-30" style={{ backgroundColor: textColor }} />
           <p
-            className="text-stone-700 text-base italic"
-            style={{ fontFamily: 'var(--font-baskerville)' }}
+            className="text-base italic opacity-70"
+            style={{ color: textColor, fontFamily: 'var(--font-baskerville)' }}
           >
             We'd love to know if you can join us.
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="border border-stone-200 p-8 space-y-6 bg-white">
+        <form onSubmit={handleSubmit} className="space-y-5">
 
           {/* Name */}
           <div>
             <label
-              className="block text-xs font-medium text-stone-500 tracking-widest uppercase mb-2"
-              style={{ fontFamily: 'var(--font-cinzel)' }}
+              className="block text-xs tracking-widest uppercase mb-2 opacity-60"
+              style={{ color: textColor, fontFamily: 'var(--font-cinzel)' }}
             >
               Your name
             </label>
@@ -107,15 +107,15 @@ export default function RsvpForm() {
               onChange={e => setName(e.target.value)}
               placeholder="First and last name"
               className={inputCls}
-              style={{ fontFamily: 'var(--font-baskerville)' }}
+              style={{ color: textColor, fontFamily: 'var(--font-baskerville)' }}
             />
           </div>
 
           {/* Yes / No */}
           <div>
             <label
-              className="block text-xs font-medium text-stone-500 tracking-widest uppercase mb-2"
-              style={{ fontFamily: 'var(--font-cinzel)' }}
+              className="block text-xs tracking-widest uppercase mb-2 opacity-60"
+              style={{ color: textColor, fontFamily: 'var(--font-cinzel)' }}
             >
               Will you be joining us?
             </label>
@@ -124,11 +124,9 @@ export default function RsvpForm() {
                 type="button"
                 onClick={() => setResponse('accepted')}
                 className={`py-3 border-2 text-sm font-medium transition ${
-                  response === 'accepted'
-                    ? 'bg-stone-800 border-stone-800 text-white'
-                    : 'bg-white border-stone-200 text-stone-700 hover:border-stone-400'
+                  response === 'accepted' ? 'bg-white/20 border-white/70' : 'bg-transparent border-white/20 hover:border-white/40'
                 }`}
-                style={{ fontFamily: 'var(--font-baskerville)' }}
+                style={{ color: textColor, fontFamily: 'var(--font-baskerville)' }}
               >
                 🥂 Yes, I'll be there
               </button>
@@ -136,11 +134,9 @@ export default function RsvpForm() {
                 type="button"
                 onClick={() => setResponse('declined')}
                 className={`py-3 border-2 text-sm font-medium transition ${
-                  response === 'declined'
-                    ? 'bg-stone-800 border-stone-800 text-white'
-                    : 'bg-white border-stone-200 text-stone-700 hover:border-stone-400'
+                  response === 'declined' ? 'bg-white/20 border-white/70' : 'bg-transparent border-white/20 hover:border-white/40'
                 }`}
-                style={{ fontFamily: 'var(--font-baskerville)' }}
+                style={{ color: textColor, fontFamily: 'var(--font-baskerville)' }}
               >
                 💌 Sorry, I can't
               </button>
@@ -150,10 +146,13 @@ export default function RsvpForm() {
           {/* Email */}
           <div>
             <label
-              className="block text-xs font-medium text-stone-500 tracking-widest uppercase mb-2"
-              style={{ fontFamily: 'var(--font-cinzel)' }}
+              className="block text-xs tracking-widest uppercase mb-2 opacity-60"
+              style={{ color: textColor, fontFamily: 'var(--font-cinzel)' }}
             >
-              Email <span className="normal-case tracking-normal text-stone-400" style={{ fontFamily: 'var(--font-baskerville)' }}>(optional)</span>
+              Email{' '}
+              <span className="normal-case tracking-normal opacity-60" style={{ fontFamily: 'var(--font-baskerville)' }}>
+                (optional)
+              </span>
             </label>
             <input
               type="email"
@@ -161,17 +160,20 @@ export default function RsvpForm() {
               onChange={e => setEmail(e.target.value)}
               placeholder="you@example.com"
               className={inputCls}
-              style={{ fontFamily: 'var(--font-baskerville)' }}
+              style={{ color: textColor, fontFamily: 'var(--font-baskerville)' }}
             />
           </div>
 
           {/* Message */}
           <div>
             <label
-              className="block text-xs font-medium text-stone-500 tracking-widest uppercase mb-2"
-              style={{ fontFamily: 'var(--font-cinzel)' }}
+              className="block text-xs tracking-widest uppercase mb-2 opacity-60"
+              style={{ color: textColor, fontFamily: 'var(--font-cinzel)' }}
             >
-              Message <span className="normal-case tracking-normal text-stone-400" style={{ fontFamily: 'var(--font-baskerville)' }}>(optional)</span>
+              Message{' '}
+              <span className="normal-case tracking-normal opacity-60" style={{ fontFamily: 'var(--font-baskerville)' }}>
+                (optional)
+              </span>
             </label>
             <textarea
               value={message}
@@ -179,12 +181,12 @@ export default function RsvpForm() {
               placeholder="Anything you'd like us to know…"
               rows={3}
               className={`${inputCls} resize-none`}
-              style={{ fontFamily: 'var(--font-baskerville)' }}
+              style={{ color: textColor, fontFamily: 'var(--font-baskerville)' }}
             />
           </div>
 
           {error && (
-            <p className="text-red-500 text-sm italic" style={{ fontFamily: 'var(--font-baskerville)' }}>
+            <p className="text-red-400 text-sm italic" style={{ fontFamily: 'var(--font-baskerville)' }}>
               {error}
             </p>
           )}
@@ -192,8 +194,8 @@ export default function RsvpForm() {
           <button
             type="submit"
             disabled={submitting || !name.trim() || !response}
-            className="w-full border border-stone-800 bg-stone-800 hover:bg-stone-700 text-white py-3 transition disabled:opacity-40 tracking-widest uppercase text-sm"
-            style={{ fontFamily: 'var(--font-cinzel)' }}
+            className="w-full border border-white/40 hover:bg-white/10 py-3 transition disabled:opacity-40 tracking-widest uppercase text-sm"
+            style={{ color: textColor, fontFamily: 'var(--font-cinzel)' }}
           >
             {submitting ? 'Sending…' : 'Send RSVP'}
           </button>
