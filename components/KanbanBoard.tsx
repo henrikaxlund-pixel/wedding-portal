@@ -6,10 +6,12 @@ import TaskCard from './TaskCard';
 import TaskModal from './TaskModal';
 
 export const COLUMNS = [
-  { id: 'venue', label: 'Venue & Entertainment', emoji: '🎉' },
-  { id: 'catering', label: 'Catering', emoji: '🍽️' },
-  { id: 'clothes', label: 'Clothes', emoji: '👗' },
-  { id: 'ceremony', label: 'Ceremony', emoji: '💒' },
+  { id: 'venue',          label: 'Venue',            emoji: '🏛️' },
+  { id: 'entertainment',  label: 'Entertainment',    emoji: '🎶' },
+  { id: 'catering',       label: 'Catering',         emoji: '🍽️' },
+  { id: 'styling-riina',  label: 'Styling — Riina',  emoji: '🌸' },
+  { id: 'styling-henrik', label: 'Styling — Henrik', emoji: '🤵' },
+  { id: 'ceremony',       label: 'Ceremony',         emoji: '💒' },
 ];
 
 export type Status = 'not_started' | 'started' | 'completed';
