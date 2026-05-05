@@ -10,7 +10,7 @@ function normaliseName(name: string) {
 /** Try to find an exact (normalised) name match in the guests table. */
 async function findMatchingGuest(submittedName: string) {
   const norm = normaliseName(submittedName);
-  const guests = await sql`SELECT id, name FROM guests`;
+  const guests = await sql`SELECT id, name, side FROM guests`;
   return guests.find(g => normaliseName(g.name) === norm) ?? null;
 }
 
@@ -43,13 +43,26 @@ export async function POST(req: NextRequest) {
       `;
     }
 
-    // Also match and confirm the avec guest if provided
+    // Also handle the avec guest if provided
     if (avec_name && response === 'accepted') {
       const avecMatch = await findMatchingGuest(avec_name);
       if (avecMatch) {
+        // Existing guest — confirm them and link avec both ways
+        await sql`UPDATE guests SET answered = 'accepted', avec = ${name}, updated_at = NOW() WHERE id = ${avecMatch.id}`;
+        if (match) {
+          await sql`UPDATE guests SET avec = ${avec_name} WHERE id = ${match.id}`;
+        }
+      } else {
+        // Not in guest list — create them on the same side as the main guest
+        const side = match?.side ?? 'henrik';
+        const avecId = crypto.randomUUID();
         await sql`
-          UPDATE guests SET answered = 'accepted', updated_at = NOW() WHERE id = ${avecMatch.id}
+          INSERT INTO guests (id, name, side, answered, avec)
+          VALUES (${avecId}, ${avec_name}, ${side}, 'accepted', ${name})
         `;
+        if (match) {
+          await sql`UPDATE guests SET avec = ${avec_name} WHERE id = ${match.id}`;
+        }
       }
     }
 
