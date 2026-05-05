@@ -7,7 +7,6 @@ export default function RsvpForm({ textColor = '#f5f0e8' }: { textColor?: string
   const [email, setEmail] = useState('');
   const [response, setResponse] = useState<'accepted' | 'declined' | null>(null);
   const [avecName, setAvecName] = useState('');
-  const [message, setMessage] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
   const [error, setError] = useState('');
@@ -21,7 +20,7 @@ export default function RsvpForm({ textColor = '#f5f0e8' }: { textColor?: string
       const res = await fetch('/api/rsvp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email: email || null, response, avec_name: avecName || null, message: message || null }),
+        body: JSON.stringify({ name, email: email || null, response, avec_name: avecName || null }),
       });
       if (!res.ok) throw new Error('Something went wrong.');
       setDone(true);
@@ -138,28 +137,26 @@ export default function RsvpForm({ textColor = '#f5f0e8' }: { textColor?: string
             </div>
           </div>
 
-          {/* Avec name — only when accepted */}
-          {response === 'accepted' && (
-            <div>
-              <label
-                className="block text-xs tracking-widest uppercase mb-2 opacity-60"
-                style={{ color: textColor, fontFamily: 'var(--font-cinzel)' }}
-              >
-                Bringing a plus one?{' '}
-                <span className="normal-case tracking-normal opacity-60" style={{ fontFamily: 'var(--font-baskerville)' }}>
-                  (optional)
-                </span>
-              </label>
-              <input
-                type="text"
-                value={avecName}
-                onChange={e => setAvecName(e.target.value)}
-                placeholder="Their name"
-                className={inputCls}
-                style={{ color: textColor, fontFamily: 'var(--font-baskerville)' }}
-              />
-            </div>
-          )}
+          {/* Avec name — always shown, optional */}
+          <div>
+            <label
+              className="block text-xs tracking-widest uppercase mb-2 opacity-60"
+              style={{ color: textColor, fontFamily: 'var(--font-cinzel)' }}
+            >
+              Plus one{' '}
+              <span className="normal-case tracking-normal opacity-60" style={{ fontFamily: 'var(--font-baskerville)' }}>
+                (optional)
+              </span>
+            </label>
+            <input
+              type="text"
+              value={avecName}
+              onChange={e => setAvecName(e.target.value)}
+              placeholder="Their name"
+              className={inputCls}
+              style={{ color: textColor, fontFamily: 'var(--font-baskerville)' }}
+            />
+          </div>
 
           {/* Email */}
           <div>
@@ -178,27 +175,6 @@ export default function RsvpForm({ textColor = '#f5f0e8' }: { textColor?: string
               onChange={e => setEmail(e.target.value)}
               placeholder="you@example.com"
               className={inputCls}
-              style={{ color: textColor, fontFamily: 'var(--font-baskerville)' }}
-            />
-          </div>
-
-          {/* Message */}
-          <div>
-            <label
-              className="block text-xs tracking-widest uppercase mb-2 opacity-60"
-              style={{ color: textColor, fontFamily: 'var(--font-cinzel)' }}
-            >
-              Message{' '}
-              <span className="normal-case tracking-normal opacity-60" style={{ fontFamily: 'var(--font-baskerville)' }}>
-                (optional)
-              </span>
-            </label>
-            <textarea
-              value={message}
-              onChange={e => setMessage(e.target.value)}
-              placeholder="Anything you'd like us to know…"
-              rows={3}
-              className={`${inputCls} resize-none`}
               style={{ color: textColor, fontFamily: 'var(--font-baskerville)' }}
             />
           </div>

@@ -39,10 +39,18 @@ export async function POST(req: NextRequest) {
     // If auto-matched, update the guest's answered field
     if (match) {
       await sql`
-        UPDATE guests
-        SET answered = ${response}, updated_at = NOW()
-        WHERE id = ${match.id}
+        UPDATE guests SET answered = ${response}, updated_at = NOW() WHERE id = ${match.id}
       `;
+    }
+
+    // Also match and confirm the avec guest if provided
+    if (avec_name && response === 'accepted') {
+      const avecMatch = await findMatchingGuest(avec_name);
+      if (avecMatch) {
+        await sql`
+          UPDATE guests SET answered = 'accepted', updated_at = NOW() WHERE id = ${avecMatch.id}
+        `;
+      }
     }
 
     return NextResponse.json({ ok: true, matched: !!match }, { status: 201 });
