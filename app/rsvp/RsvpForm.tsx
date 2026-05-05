@@ -39,18 +39,12 @@ export default function RsvpForm({ textColor = '#f5f0e8' }: { textColor?: string
       <main className="min-h-screen flex items-center justify-center px-4">
         <div className="w-full max-w-sm text-center space-y-5">
 
-          <h1
-            className="text-2xl tracking-widest uppercase"
-            style={{ color: textColor, fontFamily: 'var(--font-cinzel)' }}
-          >
-            {response === 'accepted' ? 'See you there' : 'Until next time'}
-          </h1>
           <p
             className="text-base italic leading-relaxed opacity-75"
             style={{ color: textColor, fontFamily: 'var(--font-baskerville)' }}
           >
             {response === 'accepted'
-              ? `We're so happy you can join us, ${name.split(' ')[0]}. We'll be in touch with more details closer to the day.`
+              ? `We're so happy you can join us, ${name.split(' ')[0]}. See you there!`
               : `Thank you for letting us know, ${name.split(' ')[0]}. You'll be missed.`}
           </p>
           <p
