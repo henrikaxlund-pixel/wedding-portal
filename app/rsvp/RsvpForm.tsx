@@ -38,7 +38,7 @@ export default function RsvpForm({ textColor = '#f5f0e8' }: { textColor?: string
     return (
       <main className="min-h-screen flex items-center justify-center px-4">
         <div className="w-full max-w-sm text-center space-y-5">
-          <div className="text-5xl">{response === 'accepted' ? '🥂' : '💌'}</div>
+
           <h1
             className="text-2xl tracking-widest uppercase"
             style={{ color: textColor, fontFamily: 'var(--font-cinzel)' }}
