@@ -164,7 +164,10 @@ export default function RsvpForm({ textColor = '#f5f0e8' }: { textColor?: string
               className="block text-xs tracking-widest uppercase mb-2 opacity-60"
               style={{ color: textColor, fontFamily: 'var(--font-cinzel)' }}
             >
-              Email
+              Email{' '}
+              <span className="normal-case tracking-normal opacity-60" style={{ fontFamily: 'var(--font-baskerville)' }}>
+                (required)
+              </span>
             </label>
             <input
               type="email"
