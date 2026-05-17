@@ -20,7 +20,7 @@ export default function RsvpForm({ textColor = '#f5f0e8' }: { textColor?: string
       const res = await fetch('/api/rsvp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email: email || null, response, avec_name: avecName || null }),
+        body: JSON.stringify({ name, email, response, avec_name: avecName || null }),
       });
       if (!res.ok) throw new Error('Something went wrong.');
       setDone(true);
@@ -158,19 +158,17 @@ export default function RsvpForm({ textColor = '#f5f0e8' }: { textColor?: string
             />
           </div>
 
-          {/* Email */}
+          {/* Email — required */}
           <div>
             <label
               className="block text-xs tracking-widest uppercase mb-2 opacity-60"
               style={{ color: textColor, fontFamily: 'var(--font-cinzel)' }}
             >
-              Email{' '}
-              <span className="normal-case tracking-normal opacity-60" style={{ fontFamily: 'var(--font-baskerville)' }}>
-                (optional)
-              </span>
+              Email
             </label>
             <input
               type="email"
+              required
               value={email}
               onChange={e => setEmail(e.target.value)}
               placeholder="you@example.com"
@@ -187,7 +185,7 @@ export default function RsvpForm({ textColor = '#f5f0e8' }: { textColor?: string
 
           <button
             type="submit"
-            disabled={submitting || !name.trim() || !response}
+            disabled={submitting || !name.trim() || !response || !email.trim()}
             className="w-full border border-white/40 hover:bg-white/10 py-3 transition disabled:opacity-40 tracking-widest uppercase text-sm"
             style={{ color: textColor, fontFamily: 'var(--font-cinzel)' }}
           >

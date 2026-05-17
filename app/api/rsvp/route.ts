@@ -36,10 +36,10 @@ export async function POST(req: NextRequest) {
       RETURNING *
     `;
 
-    // If auto-matched, update the guest's answered field
+    // If auto-matched, update the guest's answered field and save their email
     if (match) {
       await sql`
-        UPDATE guests SET answered = ${response}, updated_at = NOW() WHERE id = ${match.id}
+        UPDATE guests SET answered = ${response}, email = ${email ?? null}, updated_at = NOW() WHERE id = ${match.id}
       `;
     }
 

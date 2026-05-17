@@ -2,6 +2,7 @@
 import { redirect } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import GuestList from '@/components/GuestList';
+import EmailComposer from '@/components/EmailComposer';
 
 export default async function GuestsPage() {
   const session = await auth();
@@ -13,8 +14,9 @@ export default async function GuestsPage() {
       <main className="flex-1 p-6">
         <div className="mb-6">
           <h1 className="text-2xl font-semibold text-stone-800">Guest List</h1>
-          <p className="text-stone-700 text-sm mt-1">21 December 2026 Â· Helsinki</p>
+          <p className="text-stone-700 text-sm mt-1">21 December 2026 · Helsinki</p>
         </div>
+        <EmailComposer />
         <GuestList />
       </main>
     </div>
