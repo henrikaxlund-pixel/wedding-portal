@@ -3,13 +3,17 @@ import { auth } from '@/auth';
 import sql from '@/lib/db';
 import nodemailer from 'nodemailer';
 
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.GMAIL_FROM,
-    pass: process.env.GMAIL_APP_PASSWORD,
-  },
-});
+export const runtime = 'nodejs';
+
+function getTransporter() {
+  return nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.GMAIL_FROM,
+      pass: process.env.GMAIL_APP_PASSWORD,
+    },
+  });
+}
 
 export async function POST(req: NextRequest) {
   const session = await auth();
@@ -30,6 +34,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'No confirmed guests with email addresses' }, { status: 400 });
   }
 
+  const transporter = getTransporter();
   const errors: string[] = [];
   let sent = 0;
 
