@@ -37,7 +37,10 @@ export default function GuestList() {
   const [newAvecName, setNewAvecName] = useState('');
 
   useEffect(() => {
-    fetch('/api/guests').then(r => r.json()).then(g => { setGuests(g); setLoading(false); });
+    fetch('/api/guests')
+      .then(r => r.json())
+      .then(g => { setGuests(Array.isArray(g) ? g : []); setLoading(false); })
+      .catch(() => setLoading(false));
   }, []);
 
   const byName = (a: Guest, b: Guest) => a.name.localeCompare(b.name);
