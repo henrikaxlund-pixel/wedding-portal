@@ -176,16 +176,25 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   callbacks: {
     async signIn({ user }) {
       if (!user?.email) return false;
-      const [row] = await sql`SELECT role FROM users WHERE email = ${user.email}`;
-      // Block anyone not pre-added, or who was auto-created (role = 'blocked')
-      if (!row || row.role === 'blocked') return '/login?error=NotWhitelisted';
-      return true;
+      try {
+        const [row] = await sql`SELECT role FROM users WHERE email = ${user.email}`;
+        // Block anyone not pre-added, or who was auto-created (role = 'blocked')
+        if (!row || row.role === 'blocked') return '/login?error=NotWhitelisted';
+        return true;
+      } catch (e) {
+        console.error('signIn DB error:', e);
+        return false;
+      }
     },
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
-        const [dbUser] = await sql`SELECT role FROM users WHERE id = ${user.id as string}`;
-        token.role = dbUser?.role ?? 'dearest';
+        try {
+          const [dbUser] = await sql`SELECT role FROM users WHERE id = ${user.id as string}`;
+          token.role = dbUser?.role ?? 'dearest';
+        } catch {
+          token.role = 'dearest';
+        }
       }
       return token;
     },
