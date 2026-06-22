@@ -1,6 +1,7 @@
 import GuestPageClient from '@/components/GuestPageClient';
 import { auth } from '@/auth';
 import { Cinzel, Libre_Baskerville } from 'next/font/google';
+import sql from '@/lib/db';
 
 const cinzel = Cinzel({
   subsets: ['latin'],
@@ -23,10 +24,19 @@ export default async function GuestPage() {
     isEditor = !!(session?.user);
   } catch {}
 
-  let content: Record<string, string> = {};
+  const DEFAULTS: Record<string, string> = {
+    hero_title:       'Riina & Henrik',
+    hero_subtitle:    'Winter Solstice · 21 December 2026 · Helsinki',
+    hero_body:        'Join us as we celebrate the longest night of the year.',
+    background_type:  'color',
+    background_value: '#1a1a2e',
+    text_color:       '#f5f0e8',
+    modules:          '[]',
+  };
+  let content: Record<string, string> = { ...DEFAULTS };
   try {
-    const res = await fetch(`${process.env.NEXTAUTH_URL ?? 'http://localhost:3000'}/api/page-content`, { cache: 'no-store' });
-    content = await res.json();
+    const rows = await sql`SELECT key, value FROM page_content`;
+    for (const row of rows) content[row.key] = row.value;
   } catch {}
 
   return (

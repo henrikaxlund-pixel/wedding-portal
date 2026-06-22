@@ -1,5 +1,6 @@
 import { Cinzel, Libre_Baskerville } from 'next/font/google';
 import RsvpForm from './RsvpForm';
+import sql from '@/lib/db';
 
 const cinzel = Cinzel({
   subsets: ['latin'],
@@ -21,8 +22,9 @@ export default async function RsvpPage() {
   let bgImage: string | null = null;
   let textColor = '#f5f0e8';
   try {
-    const res = await fetch(`${process.env.NEXTAUTH_URL ?? 'http://localhost:3000'}/api/page-content`, { cache: 'no-store' });
-    const content = await res.json();
+    const rows = await sql`SELECT key, value FROM page_content`;
+    const content: Record<string, string> = {};
+    for (const row of rows) content[row.key] = row.value;
     textColor = content.text_color ?? textColor;
     if (content.background_type === 'image' && content.background_value) {
       bgImage = content.background_value;
