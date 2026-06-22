@@ -18,7 +18,7 @@ const baskerville = Libre_Baskerville({
 
 export default async function RsvpPage() {
   // Reuse the same background + text color as the guest page
-  let bgColor = '#1a1a2e';
+  let bgColor = '#632025';
   let bgImage: string | null = null;
   let textColor = '#f5f0e8';
   try {

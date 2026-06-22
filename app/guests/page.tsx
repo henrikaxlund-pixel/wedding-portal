@@ -38,6 +38,8 @@ export default async function GuestPage() {
     const rows = await sql`SELECT key, value FROM page_content`;
     for (const row of rows) content[row.key] = row.value;
   } catch {}
+  content.background_type = 'color';
+  content.background_value = '#632025';
 
   return (
     <div className={`${cinzel.variable} ${baskerville.variable}`}>
