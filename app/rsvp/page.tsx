@@ -20,7 +20,7 @@ export default async function RsvpPage() {
   // Reuse the same background + text color as the guest page
   let bgColor = '#632025';
   let bgImage: string | null = null;
-  let textColor = '#f5f0e8';
+  let textColor = '#F3EDD0';
   try {
     const rows = await sql`SELECT key, value FROM page_content`;
     const content: Record<string, string> = {};

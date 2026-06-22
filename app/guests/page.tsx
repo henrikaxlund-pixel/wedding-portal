@@ -40,6 +40,7 @@ export default async function GuestPage() {
   } catch {}
   content.background_type = 'color';
   content.background_value = '#632025';
+  content.text_color = '#F3EDD0';
 
   return (
     <div className={`${cinzel.variable} ${baskerville.variable}`}>
