@@ -19,14 +19,19 @@ interface Submission {
 export default function RsvpSubmissions({ guests }: { guests: Guest[] }) {
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [loading, setLoading] = useState(true);
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const [matchSelections, setMatchSelections] = useState<Record<string, string>>({});
   const [matching, setMatching] = useState<string | null>(null);
 
   useEffect(() => {
     fetch('/api/rsvp')
       .then(r => r.json())
-      .then(data => { setSubmissions(data); setLoading(false); });
+      .then(data => {
+        setSubmissions(data);
+        setLoading(false);
+        const hasUnmatched = data.some((s: Submission) => !s.matched_guest_id);
+        if (hasUnmatched) setOpen(true);
+      });
   }, []);
 
   const unmatched = submissions.filter(s => !s.matched_guest_id);
@@ -63,7 +68,7 @@ export default function RsvpSubmissions({ guests }: { guests: Guest[] }) {
         className="w-full flex items-center justify-between bg-white border border-stone-200 rounded-2xl px-5 py-3.5 hover:bg-stone-50 transition"
       >
         <div className="flex items-center gap-3">
-          <span className="text-base font-semibold text-stone-800">RSVP Submissions</span>
+          <span className="text-base font-semibold text-stone-800">RSVP inbox</span>
           <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-stone-100 text-stone-700">
             {submissions.length} total
           </span>

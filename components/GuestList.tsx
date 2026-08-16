@@ -46,8 +46,9 @@ export default function GuestList() {
   const byName = (a: Guest, b: Guest) => a.name.localeCompare(b.name);
 
   const totalInvited   = guests.filter(g => g.invited).length;
-  const totalAnswered  = guests.filter(g => g.answered === 'accepted').length;
-  const totalResponded = guests.filter(g => g.answered === 'accepted' || g.answered === 'declined').length;
+  const totalAccepted  = guests.filter(g => g.answered === 'accepted').length;
+  const totalDeclined  = guests.filter(g => g.answered === 'declined').length;
+  const totalNoAnswer  = guests.filter(g => !g.answered).length;
 
   async function patchGuest(id: string, data: Partial<Guest>) {
     const res = await fetch(`/api/guests/${id}`, {
@@ -132,36 +133,26 @@ export default function GuestList() {
 
   return (
     <div className="space-y-8">
-      {/* RSVP submissions — shown to logged-in users */}
-      <RsvpSubmissions guests={guests} />
-
       {/* Stats */}
-      <div className="flex gap-3">
-        {/* Confirmed guests — big card */}
-        <div className="bg-emerald-50 border border-emerald-200 rounded-2xl px-6 py-4 flex items-center gap-3">
-          <span className="text-3xl">🥳</span>
-          <div>
-            <p className="text-3xl font-bold text-emerald-800">{totalAnswered}</p>
-            <p className="text-sm text-emerald-500 font-medium mt-0.5">Confirmed guests</p>
+      <div className="space-y-3">
+        <div className="grid grid-cols-3 gap-3">
+          <div className="bg-emerald-50 border border-emerald-200 rounded-2xl px-5 py-4 text-center">
+            <p className="text-4xl font-bold text-emerald-700">{totalAccepted}</p>
+            <p className="text-sm text-emerald-600 font-medium mt-1">Coming</p>
+          </div>
+          <div className="bg-red-50 border border-red-200 rounded-2xl px-5 py-4 text-center">
+            <p className="text-4xl font-bold text-red-500">{totalDeclined}</p>
+            <p className="text-sm text-red-500 font-medium mt-1">Not coming</p>
+          </div>
+          <div className="bg-stone-50 border border-stone-200 rounded-2xl px-5 py-4 text-center">
+            <p className="text-4xl font-bold text-stone-500">{totalNoAnswer}</p>
+            <p className="text-sm text-stone-500 font-medium mt-1">No answer yet</p>
           </div>
         </div>
-
-        {/* Listed + Invited + Responded — stacked */}
-        <div className="bg-white border border-stone-200 rounded-2xl px-5 py-3 flex flex-col justify-center gap-3 min-w-[160px]">
-          <div>
-            <p className="text-xl font-semibold text-stone-800">{guests.length}</p>
-            <p className="text-xs text-stone-600">Listed</p>
-          </div>
-          <div className="border-t border-stone-100" />
-          <div>
-            <p className="text-xl font-semibold text-stone-800">{totalInvited}</p>
-            <p className="text-xs text-stone-600">Invited</p>
-          </div>
-          <div className="border-t border-stone-100" />
-          <div>
-            <p className="text-xl font-semibold text-stone-800">{totalResponded}</p>
-            <p className="text-xs text-stone-600">Responded</p>
-          </div>
+        <div className="flex gap-3 text-sm text-stone-400 px-1">
+          <span>{guests.length} listed</span>
+          <span>·</span>
+          <span>{totalInvited} invited</span>
         </div>
       </div>
 
@@ -395,6 +386,9 @@ export default function GuestList() {
           </div>
         );
       })}
+
+      {/* RSVP submissions — at the bottom for matching */}
+      <RsvpSubmissions guests={guests} />
     </div>
   );
 }
