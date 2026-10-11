@@ -18,7 +18,7 @@ const sections = [
   },
   {
     id: 'guest-info-arrival', title: 'Arrival',
-    body: 'The venue is located under Siltanen. The Hämeentie gate will remain closed, so guests should arrive through the courtyard in Kaikukatu. Follow the signage.',
+    body: 'The venue is located under [Siltanen](https://maps.app.goo.gl/GUGq4iJSLcWj8JGr6). The Hämeentie gate will remain closed, so guests should arrive through the courtyard in Kaikukatu. Follow the signage.',
   },
   {
     id: 'guest-info-gifts', title: 'Gifts',
