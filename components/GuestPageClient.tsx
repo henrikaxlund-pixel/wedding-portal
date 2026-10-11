@@ -296,7 +296,17 @@ function EditableText({ value, editing, onChange, textColor, className, fontFami
   const style = { color: textColor, ...(fontFamily ? { fontFamily } : {}) };
 
   if (!editing) {
-    return value ? <p className={className} style={style}>{value}</p> : null;
+    if (!value) return null;
+    // Support editable Markdown links without rendering arbitrary HTML.
+    const parts = value.split(/(\[[^\]]+\]\(https?:\/\/[^\s)]+\))/g);
+    return <p className={className} style={style}>{parts.map((part, index) => {
+      const link = part.match(/^\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)$/);
+      return link ? (
+        <a key={index} href={link[2]} target="_blank" rel="noopener noreferrer" className="underline underline-offset-4 hover:opacity-80 focus-visible:outline focus-visible:outline-offset-4">
+          {link[1]}
+        </a>
+      ) : part;
+    })}</p>;
   }
 
   return multiline ? (
