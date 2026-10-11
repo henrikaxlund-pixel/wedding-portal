@@ -231,8 +231,9 @@ export default function GuestPageClient({ initialContent, isEditor }: Props) {
         <Countdown textColor={textColor} />
 
         {/* Dynamic modules */}
+        <div className="w-full max-w-2xl flex flex-col items-center">
         {modules.map(mod => (
-          <div key={mod.id} className="w-full max-w-2xl flex flex-col items-center text-center gap-4 relative group">
+          <div key={mod.id} className="w-full flex flex-col items-center text-center relative group">
             {editing && (
               <button
                 onClick={() => deleteModule(mod.id)}
@@ -245,6 +246,7 @@ export default function GuestPageClient({ initialContent, isEditor }: Props) {
               </button>
             )}
             <div className="w-16 h-px opacity-20" style={{ backgroundColor: textColor }} />
+            <div className="w-full flex flex-col items-center gap-4 py-14">
             <EditableText
               value={mod.title}
               editing={editing}
@@ -263,8 +265,13 @@ export default function GuestPageClient({ initialContent, isEditor }: Props) {
               multiline
               placeholder="Add content here…"
             />
+            </div>
           </div>
         ))}
+        {modules.length > 0 && (
+          <div className="w-16 h-px opacity-20" style={{ backgroundColor: textColor }} />
+        )}
+        </div>
 
         {/* Add section prompt in edit mode when no modules */}
         {editing && modules.length === 0 && (
