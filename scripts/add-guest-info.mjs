@@ -22,7 +22,7 @@ const sections = [
   },
   {
     id: 'guest-info-gifts', title: 'Gifts',
-    body: 'We do not need more material things. If you wish to gift the couple, contributions to the honeymoon account are most welcome.',
+    body: 'We do not need more material things. If you wish to gift the couple, contributions to the honeymoon account are most welcome.\n\nRecipient: Riina Rinkinen\nIBAN: FI95 5091 0360 9194 18',
   },
 ];
 
