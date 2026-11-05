@@ -216,17 +216,6 @@ export default function GuestPageClient({ initialContent, isEditor }: Props) {
         {/* Divider */}
         <div className="w-64 h-px opacity-30" style={{ backgroundColor: textColor }} />
 
-        {/* RSVP button */}
-        <a
-          href="/rsvp"
-          className="border border-white/40 hover:border-white/70 px-20 py-6 text-center transition hover:bg-white/5"
-          style={{ fontFamily: 'var(--font-cinzel)' }}
-        >
-          <span className="block text-xl tracking-[0.4em] uppercase" style={{ color: textColor }}>
-            RSVP
-          </span>
-        </a>
-
         {/* Countdown */}
         <Countdown textColor={textColor} />
 
